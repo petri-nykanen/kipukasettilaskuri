@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/kipukasettilaskuri/static/js/main.a544d281.js",
+    "main.js": "/kipukasettilaskuri/static/js/main.abd4ce16.js",
     "index.html": "/kipukasettilaskuri/index.html",
-    "main.a544d281.js.map": "/kipukasettilaskuri/static/js/main.a544d281.js.map"
+    "main.abd4ce16.js.map": "/kipukasettilaskuri/static/js/main.abd4ce16.js.map"
   },
   "entrypoints": [
-    "static/js/main.a544d281.js"
+    "static/js/main.abd4ce16.js"
   ]
 }
