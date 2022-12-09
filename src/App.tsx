@@ -12,6 +12,7 @@ function App() {
 
   const titleRef = useRef<any>();
   const headerRef = useRef<any>();
+  const totalRef = useRef<any>();
 
   const scroll = () => {
     titleRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -35,16 +36,7 @@ function App() {
           Määrää lääkkeen vrk-annos mg (oranssi kenttä), saat vastaavan määrä ml:ssa viereiseen sarakkeeseen
 
           </p>
-          <Button variant="outlined" onClick={() => setOhje({...ohje, sivu : 2})}>Seuraava</Button>
-          </>
-          : (ohje.sivu === 2)
-          ? 
-          <>
-          <p>
-          Katso liuoksen minimimäärä vuorokaudessa ja tunnissa.
-
-          </p>
-          <Button variant="outlined" onClick={() => setOhje({...ohje, sivu : 3})}>Seuraava</Button>
+          <Button variant="outlined" onClick={() => {setOhje({...ohje, sivu : 2}); scroll()}}>Seuraava</Button>
           </>
           : (ohje.sivu === 3)
           ? 
@@ -66,7 +58,16 @@ function App() {
           <Yhteensa/>
       </Container>
       {
-        (ohje.sivu === 4)
+        (ohje.sivu === 2)
+        ? 
+        <>
+        <p>
+        Katso liuoksen minimimäärä vuorokaudessa ja tunnissa.
+
+        </p>
+        <Button variant="outlined" onClick={() => {setOhje({...ohje, sivu : 3}); scrollHead()}}>Seuraava</Button>
+        </>
+        :(ohje.sivu === 4)
         ?
         <>
         <p>Tarvittaessa, määritä bolukset alas taulukkoon ml ja max bol/h</p>

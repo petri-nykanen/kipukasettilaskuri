@@ -1,10 +1,30 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
+import React, { useContext, useEffect, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
+
+interface Muokkaus{
+  paalla : boolean
+  tiedot : Laakeannos
+}
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, nacl, ohje } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, nacl, ohje, setLaakeTaulukko } = useContext(Context)
+    const [muokkausTila, setMuokkaustila] = useState<Muokkaus>({
+      paalla : false,
+      tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}
+    });
+
+    useEffect(() => {
+      if ((muokkausTila.tiedot.valmiste !== "") && (muokkausTila.tiedot.laVahvuus !== 0) && (muokkausTila.tiedot.mgVrk !== 0))
+      {
+        setLaakeTaulukko([...laakeTaulukko, muokkausTila.tiedot])
+        setMuokkaustila({...muokkausTila, paalla : false,
+          tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}})
+      }
+    }, [muokkausTila])
+    
 
   return (
     <TableContainer sx={{width:"70%"}}>
@@ -53,7 +73,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
 
                 <TableCell>
                   {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
+                    (laake.valmiste === "Natriumkloridi")
                     ? <Typography>{laake.valmiste}</Typography>
                     : <TextField defaultValue={laake.valmiste} sx={{width:"100%"}}/>
                   }
@@ -61,7 +81,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
 
                 <TableCell align="center">
                   {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
+                    (laake.valmiste === "Natriumkloridi")
                     ? <Typography>{laake.laVahvuus}</Typography>
                     : <TextField defaultValue={laake.laVahvuus} sx={{width:"100%"}}/>
                   }
@@ -73,7 +93,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   :{}
                   }>
                   {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
+                    (laake.valmiste === "Natriumkloridi")
                     ? <></>
                     : <TextField sx={{backgroundColor:"orange"}} defaultValue={laake.mgVrk} onChange={(e) => laakeTaulukko[idx].mgVrk = e.target.value}/>
                   }
@@ -95,6 +115,32 @@ export const Taulukko : React.FC = () : React.ReactElement => {
             )
         })
         }
+        <TableRow>
+          {
+            (muokkausTila.paalla)
+            ? 
+            <>
+            <TableCell>
+
+              <TextField type={"text"} onBlur={(e) => setMuokkaustila({...muokkausTila, tiedot : {...muokkausTila.tiedot, valmiste : e.target.value}})} sx={{backgroundColor:"orange"}}></TextField>
+              
+              </TableCell>
+
+            <TableCell>
+                          
+            <TextField type={"number"} onBlur={(e) => setMuokkaustila({...muokkausTila, tiedot : {...muokkausTila.tiedot, laVahvuus : Number(e.target.value)}})} sx={{backgroundColor:"orange"}}></TextField>
+
+            </TableCell>
+
+            <TableCell>
+                          
+              <TextField type={"number"} onChange={(e) => setMuokkaustila({...muokkausTila, tiedot : {...muokkausTila.tiedot, mgVrk : Number(e.target.value)}})} sx={{backgroundColor:"orange"}}></TextField>
+  
+              </TableCell>
+            </>
+            : <TableCell><IconButton onClick={() => setMuokkaustila({...muokkausTila, paalla : true})}><AddIcon/>Muu (kirjaa mikä)</IconButton></TableCell>
+          }
+        </TableRow>
                     <TableRow>
                         <TableCell></TableCell>
                         <TableCell></TableCell>

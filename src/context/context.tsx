@@ -22,7 +22,7 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
   const [nacl, setNacl] = useState<Laakeannos>(
     {
-      valmiste: "Natriumkloridi (9 mg/ml)",
+      valmiste: "Natriumkloridi",
       laVahvuus: 9,
       mgVrk: 10
     },
@@ -41,36 +41,44 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
   
     const [laakeTaulukko, setLaakeTaulukko] = useState<Laakeannos[]>([
       {
-        valmiste: "Morfiini (20 mg/ml)",
+        valmiste: "Morfiini",
         laVahvuus: 20,
         mgVrk: 30
       },
       {
-        valmiste: "Oksikodoni (10 mg/ml)",
+        valmiste: "Oksikodoni",
         laVahvuus: 10,
         mgVrk: 0
       },
       {
-        valmiste: "Hydromorfiini (50 mg/ml)",
+        valmiste: "Hydromorfiini",
         laVahvuus: 50,
         mgVrk: 0
       },
       {
-        valmiste: "Haloperidoli (5 mg/ml)",
+        valmiste: "Haloperidoli",
         laVahvuus: 5,
         mgVrk: 5
       },
       {
-        valmiste: "Midatsolaami (5 mg/ml)",
+        valmiste: "Midatsolaami",
         laVahvuus: 5,
         mgVrk: 0
       },
       {
-        valmiste: "Glykopyrroni (0.2 mg/ml)",
+        valmiste: "Glykopyrroni",
         laVahvuus: 0.2,
         mgVrk: 1.2
-      },
+      }
     ])
+
+    const [muu, setMuu] = useState<Laakeannos>(
+      {
+        valmiste: "Muu (kirjaa mikä)",
+        laVahvuus: 0,
+        mgVrk: 0
+      },
+    );
 
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
 
@@ -129,7 +137,12 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
     useEffect(() => {
       if (laakeTaulukko === laakeTaulukko)
       setLaakeTaulukko([...laakeTaulukko])
+      if (muu.laVahvuus > 0)
       setMlVrkSumma(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(nacl.mgVrk))
+      else 
+      setMlVrkSumma(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(nacl.mgVrk) + 
+      Number(muu.mgVrk)
+      )
     }, [laakeTaulukko])
     
 
@@ -149,7 +162,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       getIndex,
       bolusSumma,
       ohje,
-      setOhje
+      setOhje,
+      muu,
+      setMuu
     }}>
         {props.children}
     </Context.Provider>
