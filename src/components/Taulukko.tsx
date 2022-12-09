@@ -4,7 +4,7 @@ import { Context, Laakeannos } from '../context/context'
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, nacl } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, nacl, ohje } = useContext(Context)
 
   return (
     <TableContainer sx={{width:"70%"}}>
@@ -26,7 +26,13 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           <TableCell>{nacl.valmiste}</TableCell>
           <TableCell align="center">{nacl.laVahvuus}</TableCell>
           <TableCell align="center"></TableCell>
-          <TableCell align="center"><TextField sx={{backgroundColor:"orange"}} defaultValue={nacl.mgVrk} onChange={(e) => nacl.mgVrk = e.target.value}/></TableCell>
+          <TableCell align="center"
+          sx={
+            (ohje.sivu === 3)
+            ?{border:"5px solid blue"}
+            :{}
+            }
+          ><TextField sx={{backgroundColor:"orange"}} defaultValue={nacl.mgVrk} onChange={(e) => nacl.mgVrk = e.target.value}/></TableCell>
           <TableCell align="center"></TableCell>
           <TableCell align="center"></TableCell>
           <TableCell align="center">{(nacl.mgVrk / mlVrkSumma * 50).toFixed(2)}</TableCell>
@@ -43,7 +49,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
 
             return (
               <>
-              <TableRow>
+              <TableRow key={idx}>
 
                 <TableCell>
                   {
@@ -61,7 +67,11 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   }
                   </TableCell>
 
-                <TableCell align="center">
+                <TableCell align="center" sx={
+                  (ohje.sivu === 1)
+                  ?{border:"5px solid blue"}
+                  :{}
+                  }>
                   {
                     (laake.valmiste === "Natriumkloridi (9 mg/ml)")
                     ? <></>
@@ -69,7 +79,13 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   }
                   </TableCell>
 
-                <TableCell align="center"><b>{(mlVrk) === 0 ?<></> :(mlVrk).toFixed(2)}</b></TableCell>
+                <TableCell align="center"
+                sx={
+                  (ohje.sivu === 1)
+                  ?{border:"5px solid blue"}
+                  :{}
+                  }>
+                <b>{(mlVrk) === 0 ?<></> :(mlVrk).toFixed(2)}</b></TableCell>
                 <TableCell align="center">{(mgH) === 0 ?<></> :(mgH).toFixed(2)}</TableCell>
                 <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
                 <TableCell align="center">{(kasetti50) === 0 ?<></> :(kasetti50).toFixed(2)}</TableCell>
@@ -83,13 +99,21 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
-                        <TableCell sx={{backgroundColor:"yellow"}} align="center">{mlVrkSumma} ml/vrk</TableCell>
+                        <TableCell sx={
+                  (ohje.sivu === 2)
+                  ?{border:"5px solid blue", backgroundColor:"yellow"}
+                  :{backgroundColor:"yellow"}
+                  } align="center">{mlVrkSumma.toFixed(2)} ml/vrk</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
-                        <TableCell sx={{backgroundColor:"yellow"}} align="center">{(mlVrkSumma / 24).toFixed(2)} ml/h</TableCell>
+                        <TableCell sx={
+                  (ohje.sivu === 2)
+                  ?{border:"5px solid blue", backgroundColor:"yellow"}
+                  :{backgroundColor:"yellow"}
+                  } align="center">{(mlVrkSumma / 24).toFixed(2)} ml/h</TableCell>
                     </TableRow>
       </TableBody>
     </Table>

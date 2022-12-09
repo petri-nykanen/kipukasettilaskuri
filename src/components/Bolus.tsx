@@ -4,7 +4,7 @@ import { Context, Laakeannos } from '../context/context'
 
 export const Bolus : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, nacl } = useContext(Context)
+    const { ohje, setOhje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context)
 
   return (
     <TableContainer sx={{width:"70%"}}>
@@ -18,6 +18,28 @@ export const Bolus : React.FC = () : React.ReactElement => {
           <TableCell align="center">max bol/h</TableCell>
           <TableCell align="center">lukko (min)</TableCell>
         </TableRow>
+
+        <TableRow>
+        <TableCell></TableCell>
+          <TableCell align="center"></TableCell>
+          <TableCell align="center"></TableCell>
+          <TableCell
+          sx={
+            (ohje.sivu === 4)
+            ?{border:"5px solid blue"}
+            :{}
+            }
+          align="center"><TextField defaultValue={bolus.ml} onChange={(e) => setBolus({...bolus, ml : Number(e.target.value)})}/></TableCell>
+          <TableCell 
+          sx={
+            (ohje.sivu === 4)
+            ?{border:"5px solid blue"}
+            :{}
+            }
+          align="center"><TextField defaultValue={bolus.maxH} onChange={(e) => setBolus({...bolus, maxH : Number(e.target.value)})}/></TableCell>
+          <TableCell align="center">{(60 / bolus.maxH).toFixed(2)}</TableCell>
+        </TableRow>
+
         <TableRow>
           <TableCell></TableCell>
           <TableCell align="center">pitoisuus</TableCell>
@@ -32,14 +54,16 @@ export const Bolus : React.FC = () : React.ReactElement => {
 
           let mlVrk = laake.mgVrk / laake.laVahvuus;
           let mgH = mlVrk / 24 * laake.laVahvuus;
-          let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
+          let pitMgMl = Number(mlVrk / mlVrkSumma * laake.laVahvuus)
           let kasetti50 = mlVrk / mlVrkSumma * 50;
-          let kasetti100 = mlVrk / mlVrkSumma * 100;
-          let riittavyys50kaVrk = kasetti50 / mlVrk;
+          let pitoisuus = pitMgMl * (mlVrkSumma / 24)
+          let bolusMg = pitMgMl * bolus.ml
+          let maxBolMgH = Number(bolusMg) * Number(bolus.maxH)
+          let maxLisa = maxBolMgH * 24
 
             return (
               <>
-              <TableRow>
+              <TableRow key={idx}>
 
                 <TableCell>
                   {
@@ -49,44 +73,18 @@ export const Bolus : React.FC = () : React.ReactElement => {
                   }
                   </TableCell>
 
-                <TableCell align="center">
-                  {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
-                    ? <Typography>{laake.laVahvuus}</Typography>
-                    : <TextField defaultValue={laake.laVahvuus} sx={{width:"100%"}}/>
-                  }
-                  </TableCell>
+                  <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
 
-                <TableCell align="center">
-                  {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
-                    ? <></>
-                    : <TextField sx={{backgroundColor:"orange"}} defaultValue={laake.mgVrk} onChange={(e) => laakeTaulukko[idx].mgVrk = e.target.value}/>
-                  }
-                  </TableCell>
+                  <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitoisuus).toFixed(2)}</TableCell>
 
-                <TableCell align="center"><b>{(mlVrk) === 0 ?<></> :(mlVrk).toFixed(2)}</b></TableCell>
-                <TableCell align="center">{(mgH) === 0 ?<></> :(mgH).toFixed(2)}</TableCell>
-                <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
-                <TableCell align="center">{(kasetti50) === 0 ?<></> :(kasetti50).toFixed(2)}</TableCell>
-                <TableCell align="center">{(kasetti100) === 0 ?<></> :(kasetti100).toFixed(2)}</TableCell>
+                <TableCell align="center"><b>{(bolusMg) === 0 ?<></> :(bolusMg).toFixed(2)}</b></TableCell>
+                <TableCell align="center">{(maxBolMgH) === 0 ?<></> :(maxBolMgH).toFixed(2)}</TableCell>
+                <TableCell align="center">{(maxLisa) === 0 ?<></> :(maxLisa).toFixed(2)}</TableCell>
                 </TableRow>
               </>
             )
         })
         }
-                    <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell sx={{backgroundColor:"yellow"}} align="center">{mlVrkSumma} ml/vrk</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell sx={{backgroundColor:"yellow"}} align="center">{(mlVrkSumma / 24).toFixed(2)} ml/h</TableCell>
-                    </TableRow>
       </TableBody>
     </Table>
   </TableContainer>
