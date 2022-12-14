@@ -1,5 +1,6 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import React, { useContext, useEffect, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
 
@@ -15,6 +16,12 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       paalla : false,
       tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}
     });
+
+    const poisto = (indeksi : number) => {
+      setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))
+      console.log(laakeTaulukko)
+      console.log(indeksi)
+    }
 
     useEffect(() => {
       if ((muokkausTila.tiedot.valmiste !== "") && (muokkausTila.tiedot.laVahvuus !== 0) && (muokkausTila.tiedot.mgVrk !== 0))
@@ -71,12 +78,9 @@ export const Taulukko : React.FC = () : React.ReactElement => {
               <>
               <TableRow key={idx}>
 
-                <TableCell>
-                  {
-                    (laake.valmiste === "Natriumkloridi")
-                    ? <Typography>{laake.valmiste}</Typography>
-                    : <TextField defaultValue={laake.valmiste} sx={{width:"100%"}}/>
-                  }
+                <TableCell sx={{display:"flex"}}> 
+                    <IconButton onClick={() => poisto(idx)}><ClearIcon/></IconButton>
+                    <Typography sx={{padding:"10px"}}>{laake.valmiste}</Typography>
                   </TableCell>
 
                 <TableCell align="center">

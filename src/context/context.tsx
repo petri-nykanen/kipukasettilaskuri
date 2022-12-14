@@ -40,6 +40,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
   
     const [laakeTaulukko, setLaakeTaulukko] = useState<Laakeannos[]>([
+    ])
+
+    const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>([
       {
         valmiste: "Morfiini",
         laVahvuus: 20,
@@ -69,7 +72,8 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
         valmiste: "Glykopyrroni",
         laVahvuus: 0.2,
         mgVrk: 1.2
-      }
+      },
+      
     ])
 
     const [muu, setMuu] = useState<Laakeannos>(
@@ -80,23 +84,36 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       },
     );
 
-    const [mlVrkSumma, setMlVrkSumma] = useState<number>(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
-
-    const [riittavyys50ml, setRiittavyys50ml] = useState<number>(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(
-      (
-        (
-          ((seuraava.mgVrk / seuraava.laVahvuus) / mlVrkSumma * 50)
-          /
-          ((seuraava.mgVrk + 0.0000001) / seuraava.laVahvuus)
-        )
-        +
-        (
-          ((nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50)
-          /
-          (nacl.mgVrk / nacl.laVahvuus)
-        )
+    const [mlVrkSumma, setMlVrkSumma] = useState<number>(
+      laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
       )
-    )}, 0))
+
+    const [riittavyys50ml, setRiittavyys50ml] = useState<number>(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {
+      if (nacl.laVahvuus && nacl.laVahvuus > 0)
+      {
+        return (edellinen + Number(
+          (
+            (
+              ((seuraava.mgVrk / seuraava.laVahvuus) / mlVrkSumma * 50)
+              /
+              ((seuraava.mgVrk + 0.0000001) / seuraava.laVahvuus)
+            )
+            +
+            (
+              ((nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50)
+              /
+              (nacl.mgVrk / nacl.laVahvuus)
+            )
+          )))
+      }
+      else return (edellinen + Number(
+        (
+          (
+            ((seuraava.mgVrk / seuraava.laVahvuus) / mlVrkSumma * 50)
+            /
+            ((seuraava.mgVrk + 0.0000001) / seuraava.laVahvuus)
+          )
+        )))}, 0))
 
     const summaTaulukko : any[] = Array.from(laakeTaulukko, (laake : Laakeannos) => {
 
@@ -164,7 +181,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       ohje,
       setOhje,
       muu,
-      setMuu
+      setMuu,
+      vaihtoehdot,
+      setVaihtoehdot
     }}>
         {props.children}
     </Context.Provider>
