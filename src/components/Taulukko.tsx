@@ -4,18 +4,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import React, { useContext, useEffect, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
 
-interface Muokkaus{
-  paalla : boolean
-  tiedot : Laakeannos
-}
+
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko } = useContext(Context)
-    const [muokkausTila, setMuokkaustila] = useState<Muokkaus>({
-      paalla : false,
-      tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}
-    });
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila } = useContext(Context)
 
     const poisto = (indeksi : number) => {
       setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))

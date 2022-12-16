@@ -12,7 +12,12 @@ export interface Laakeannos {
   mgVrk: number
 }
 
-interface Bolus {
+export interface Muokkaus{
+  paalla : boolean
+  tiedot : Laakeannos
+}
+
+export interface Bolus {
   ml : number
   maxH : number
 }
@@ -28,6 +33,11 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
   const [bolus, setBolus] = useState<Bolus>({
     ml : 1,
     maxH : 3
+  });
+
+  const [muokkausTila, setMuokkaustila] = useState<Muokkaus>({
+    paalla : false,
+    tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}
   });
 
   
@@ -107,8 +117,6 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
       if (isNaN(kasetti50 / mlVrk))
       return 0;
-    else if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
-    return kasetti50 / mlVrk + (Number(laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk / mlVrkSumma * 50));
     else
     return kasetti50 / mlVrk;
   })
@@ -169,7 +177,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       muu,
       setMuu,
       vaihtoehdot,
-      setVaihtoehdot
+      setVaihtoehdot,
+      muokkausTila,
+      setMuokkaustila
     }}>
         {props.children}
     </Context.Provider>

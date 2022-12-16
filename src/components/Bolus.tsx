@@ -50,7 +50,7 @@ export const Bolus : React.FC = () : React.ReactElement => {
         </TableRow>
       </TableHead>
       <TableBody>
-        { laakeTaulukko!.map((laake : Laakeannos, idx : number) => {
+        { laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").map((laake : Laakeannos, idx : number) => {
 
           let mlVrk = laake.mgVrk / laake.laVahvuus;
           let mgH = mlVrk / 24 * laake.laVahvuus;

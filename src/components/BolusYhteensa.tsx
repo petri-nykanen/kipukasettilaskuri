@@ -4,7 +4,7 @@ import { Context, Laakeannos } from '../context/context'
 
 export const BolusYhteensa : React.FC = () : React.ReactElement => {
 
-    const { bolus, setBolus, bolusSumma, mlVrkSumma } = useContext(Context)
+    const { bolus, setBolus, bolusSumma, mlVrkSumma, laakeTaulukko } = useContext(Context)
     const kasetti50 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0));
     const kasetti100 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)) * 2;
 
@@ -20,15 +20,39 @@ export const BolusYhteensa : React.FC = () : React.ReactElement => {
         </TableRow>
         <TableRow>
           <TableCell>h</TableCell>
-          <TableCell align="center">{(kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)}</TableCell>
-          <TableCell align="center">{(kasetti100 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)}</TableCell>
+          <TableCell align="center">
+            {
+            (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+            ? ((kasetti50 + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)
+            : (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)
+            }
+            </TableCell>
+          <TableCell align="center">
+            {
+            (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+            ? ((kasetti50 + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 2).toFixed(2)
+            : (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 2).toFixed(2)
+            }
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
       <TableRow>
           <TableCell align="left">vrk</TableCell>
-          <TableCell align="center">{(kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24).toFixed(2)}</TableCell>
-          <TableCell align="center">{(kasetti100 / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24).toFixed(2)}</TableCell>
+          <TableCell align="center">
+          {
+            (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+            ? ((kasetti50 + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24).toFixed(2)
+            : (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24).toFixed(2)
+            }
+          </TableCell>
+          <TableCell align="center">
+          {
+            (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+            ? ((kasetti50 + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24 * 2).toFixed(2)
+            : (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24) * 24 * 2).toFixed(2)
+            }
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>
