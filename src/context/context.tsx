@@ -20,14 +20,6 @@ interface Bolus {
 
 export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactElement<Props> => {
 
-  const [nacl, setNacl] = useState<Laakeannos>(
-    {
-      valmiste: "Natriumkloridi",
-      laVahvuus: 9,
-      mgVrk: 10
-    },
-  );
-
   const [ohje, setOhje] = useState<any>({
     auki : false,
     sivu : 0
@@ -73,49 +65,38 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
         laVahvuus: 0.2,
         mgVrk: 1.2
       },
-      
-    ])
-
-    const [muu, setMuu] = useState<Laakeannos>(
       {
         valmiste: "Muu (kirjaa mikä)",
         laVahvuus: 0,
         mgVrk: 0
       },
+      {
+        valmiste: "Natriumkloridi",
+        laVahvuus: 9,
+        mgVrk: 10
+      },
+      
+    ])
+
+    const [muu, setMuu] = useState<Laakeannos>(
+
     );
 
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(
-      laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
+      laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
       )
 
-    const [riittavyys50ml, setRiittavyys50ml] = useState<number>(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {
-      if (nacl.laVahvuus && nacl.laVahvuus > 0)
-      {
-        return (edellinen + Number(
-          (
-            (
-              ((seuraava.mgVrk / seuraava.laVahvuus) / mlVrkSumma * 50)
-              /
-              ((seuraava.mgVrk + 0.0000001) / seuraava.laVahvuus)
-            )
-            +
-            (
-              ((nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50)
-              /
-              (nacl.mgVrk / nacl.laVahvuus)
-            )
-          )))
-      }
-      else return (edellinen + Number(
+    const [riittavyys50ml, setRiittavyys50ml] = useState<number>(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {
+      return (edellinen + Number(
         (
           (
             ((seuraava.mgVrk / seuraava.laVahvuus) / mlVrkSumma * 50)
             /
-            ((seuraava.mgVrk + 0.0000001) / seuraava.laVahvuus)
+            ((seuraava.mgVrk) / seuraava.laVahvuus)
           )
         )))}, 0))
 
-    const summaTaulukko : any[] = Array.from(laakeTaulukko, (laake : Laakeannos) => {
+    const summaTaulukko : any[] = Array.from(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi"), (laake : Laakeannos) => {
 
       let mlVrk = laake.mgVrk / laake.laVahvuus;
       let mgH = mlVrk / 24 * laake.laVahvuus;
@@ -126,17 +107,21 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
       if (isNaN(kasetti50 / mlVrk))
       return 0;
-      else return kasetti50 / mlVrk;
+    else if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+    return kasetti50 / mlVrk + (Number(laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk / mlVrkSumma * 50));
+    else
+    return kasetti50 / mlVrk;
   })
 
-  const bolusSumma : any[] = Array.from(laakeTaulukko, (laake : Laakeannos) => {
+  const bolusSumma : any[] = Array.from(laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi"), (laake : Laakeannos) => {
 
     let mlVrk = laake.mgVrk / laake.laVahvuus;
     let kasetti50 = mlVrk / mlVrkSumma * 50;
 
     if (isNaN(kasetti50))
-    return 0;
-    else return kasetti50;
+      return 0;
+    else
+    return kasetti50;
 })
 
   const getIndex = () : number => {
@@ -148,18 +133,21 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       if (summaTaulukko[i] !== 0)
       idx++;
     }
-    return idx + 1;
+    console.log(idx)
+    return idx;
   }
 
     useEffect(() => {
       if (laakeTaulukko === laakeTaulukko)
       setLaakeTaulukko([...laakeTaulukko])
-      if (muu.laVahvuus > 0)
-      setMlVrkSumma(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(nacl.mgVrk))
-      else 
-      setMlVrkSumma(laakeTaulukko!.reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(nacl.mgVrk) + 
-      Number(muu.mgVrk)
+      if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+      {
+      setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk)
       )
+      }
+      else setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
+
+
     }, [laakeTaulukko])
     
 
@@ -169,8 +157,6 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       setLaakeTaulukko,
       mlVrkSumma,
       setMlVrkSumma,
-      nacl,
-      setNacl,
       riittavyys50ml,
       setRiittavyys50ml,
       bolus,

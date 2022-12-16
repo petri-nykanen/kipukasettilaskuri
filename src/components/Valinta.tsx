@@ -24,8 +24,6 @@ export const Valinta : React.FC = () : React.ReactElement => {
             return (<MenuItem key={idx} value={laake}>{laake.valmiste}</MenuItem>)
         })
     }
-    <MenuItem value={0}>Natriumkloridi</MenuItem>
-    <MenuItem value={0}>Muu (kirjaa mikä)</MenuItem>
   </Select>
 </FormControl>
   )

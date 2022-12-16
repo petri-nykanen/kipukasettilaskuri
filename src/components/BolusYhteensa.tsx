@@ -4,9 +4,9 @@ import { Context, Laakeannos } from '../context/context'
 
 export const BolusYhteensa : React.FC = () : React.ReactElement => {
 
-    const { bolus, setBolus, bolusSumma, nacl, mlVrkSumma } = useContext(Context)
-    const kasetti50 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) + nacl.mgVrk / mlVrkSumma * 50);
-    const kasetti100 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) + nacl.mgVrk / mlVrkSumma * 50) * 2;
+    const { bolus, setBolus, bolusSumma, mlVrkSumma } = useContext(Context)
+    const kasetti50 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0));
+    const kasetti100 = (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)) * 2;
 
 
   return (

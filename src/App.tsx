@@ -5,7 +5,7 @@ import { BolusYhteensa } from './components/BolusYhteensa';
 import { Taulukko } from './components/Taulukko';
 import { Valinta } from './components/Valinta';
 import { Yhteensa } from './components/Yhteensa';
-import { Context } from './context/context';
+import { Context, Laakeannos } from './context/context';
 
 function App() {
 
@@ -25,6 +25,7 @@ function App() {
 
   return (
     <>
+    <Button onClick={() => console.log(Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]))}>TEST</Button>
     <Container ref={headerRef} sx={{width:"1200px", display:"flex", flexWrap:"wrap"}}>
     {
       (ohje.auki)
