@@ -76,11 +76,6 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
         mgVrk: 1.2
       },
       {
-        valmiste: "Muu (kirjaa mikä)",
-        laVahvuus: 0,
-        mgVrk: 0
-      },
-      {
         valmiste: "Natriumkloridi",
         laVahvuus: 9,
         mgVrk: 10

@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import React, { useContext, useEffect, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
+import { Valinta } from './Valinta';
 
 
 
@@ -166,7 +167,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
   
               </TableCell>
             </>
-            : <TableCell><IconButton onClick={() => setMuokkaustila({...muokkausTila, paalla : true})}><AddIcon/>Muu (kirjaa mikä)</IconButton></TableCell>
+            : <TableCell sx={{width:"90%"}}><Valinta/></TableCell>
           }
         </TableRow>
                     <TableRow>

@@ -60,13 +60,13 @@ function App() {
       ?<Button variant="outlined" sx={{margin:"10px", display:"block"}} onClick={() => setOhje({...ohje, auki : true, sivu : 1})}>OHJE</Button>
       :<></>
     }
-    <Valinta/>
+
     { (laakeTaulukko.length > 0)
       ?<Container sx={{display:"flex", flexWrap:"nowrap"}}>
           <Taulukko/>
           <Yhteensa/>
       </Container>
-      :<></>
+      :<><Valinta/></>
     }
       {
         (ohje.sivu === 2)

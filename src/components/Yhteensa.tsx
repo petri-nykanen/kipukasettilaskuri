@@ -16,18 +16,16 @@ export const Yhteensa : React.FC = () : React.ReactElement => {
             {
               Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
               ? (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
-                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50))
-              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
-              ).toFixed(2)
+                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)).toFixed(2)
+              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)).toFixed(2)
             }
           </TableCell>
           <TableCell align="center">
           {
               Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
-              ? (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
-                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) * 2
-              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) * 2
-              ).toFixed(2)
+              ? ((bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
+                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) * 2).toFixed(2)
+              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) * 2).toFixed(2)
             }
           </TableCell>
         </TableRow>
