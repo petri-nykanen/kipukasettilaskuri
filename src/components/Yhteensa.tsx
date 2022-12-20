@@ -1,10 +1,10 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, Button } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, } from '@mui/material'
+import React, { useContext } from 'react'
 import { Context, Laakeannos } from '../context/context'
 
 export const Yhteensa : React.FC = () : React.ReactElement => {
 
-    const { ohje, setOhje, mlVrkSumma, summaTaulukko, getIndex, bolusSumma, laakeTaulukko } = useContext(Context)
+    const { ohje, mlVrkSumma, summaTaulukko, getIndex, bolusSumma, laakeTaulukko } = useContext(Context)
 
   return (
     <TableContainer sx={{width:"29.5%", marginLeft:"0.5%"}}>

@@ -41,8 +41,11 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
   });
 
   
-    const [laakeTaulukko, setLaakeTaulukko] = useState<Laakeannos[]>([
-    ])
+    const [laakeTaulukko, setLaakeTaulukko] = useState<Laakeannos[]>(
+      !localStorage.getItem("laakeaineet")
+      ? []
+      : JSON.parse(localStorage.getItem("laakeaineet")!
+      ))
 
     const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>([
       {
@@ -83,9 +86,23 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       
     ])
 
-    const [muu, setMuu] = useState<Laakeannos>(
+    const paivitaTaulukko = () => {
+      if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+      {
+      setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk)
+      )
+      }
+      else {
+        setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
+      }
+    }
 
-    );
+    const haeData = () => {
+      if (localStorage.getItem("laakeaineet"))
+        setLaakeTaulukko(JSON.parse(localStorage.getItem("laakeaineet")!))
+      else
+      localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko))
+    }
 
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(
       laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
@@ -104,11 +121,11 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
     const summaTaulukko : any[] = Array.from(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi"), (laake : Laakeannos) => {
 
       let mlVrk = laake.mgVrk / laake.laVahvuus;
-      let mgH = mlVrk / 24 * laake.laVahvuus;
-      let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
+      // let mgH = mlVrk / 24 * laake.laVahvuus;
+      // let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
       let kasetti50 = mlVrk / mlVrkSumma * 50;
-      let kasetti100 = mlVrk / mlVrkSumma * 100;
-      let riittavyys50kaVrk = kasetti50 / mlVrk;
+      // let kasetti100 = mlVrk / mlVrkSumma * 100;
+      // let riittavyys50kaVrk = kasetti50 / mlVrk;
 
       if (isNaN(kasetti50 / mlVrk))
       return 0;
@@ -136,24 +153,17 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       if (summaTaulukko[i] !== 0)
       idx++;
     }
-    console.log(idx)
     return idx;
   }
 
     useEffect(() => {
-      if (laakeTaulukko === laakeTaulukko)
-      setLaakeTaulukko([...laakeTaulukko])
-      if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
-      {
-      setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0) + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk)
-      )
-      }
-      else setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
-
-
+        paivitaTaulukko()
     }, [laakeTaulukko])
-    
 
+    useEffect(() => {
+      haeData();
+    }, [localStorage.getItem("laakeaineet")!])
+    
   return (
     <Context.Provider value={{
       laakeTaulukko,
@@ -169,8 +179,6 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       bolusSumma,
       ohje,
       setOhje,
-      muu,
-      setMuu,
       vaihtoehdot,
       setVaihtoehdot,
       muokkausTila,
@@ -180,3 +188,4 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
     </Context.Provider>
   )
 }
+
