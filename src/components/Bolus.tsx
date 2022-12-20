@@ -1,10 +1,10 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Context, Laakeannos } from '../context/context'
 
 export const Bolus : React.FC = () : React.ReactElement => {
 
-    const { ohje, setOhje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context)
+    const { ohje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context)
 
   return (
     <TableContainer sx={{width:"70%"}}>
@@ -50,12 +50,12 @@ export const Bolus : React.FC = () : React.ReactElement => {
         </TableRow>
       </TableHead>
       <TableBody>
-        { laakeTaulukko!.map((laake : Laakeannos, idx : number) => {
+        { laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").map((laake : Laakeannos, idx : number) => {
 
           let mlVrk = laake.mgVrk / laake.laVahvuus;
-          let mgH = mlVrk / 24 * laake.laVahvuus;
+          // let mgH = mlVrk / 24 * laake.laVahvuus;
           let pitMgMl = Number(mlVrk / mlVrkSumma * laake.laVahvuus)
-          let kasetti50 = mlVrk / mlVrkSumma * 50;
+          // let kasetti50 = mlVrk / mlVrkSumma * 50;
           let pitoisuus = pitMgMl * (mlVrkSumma / 24)
           let bolusMg = pitMgMl * bolus.ml
           let maxBolMgH = Number(bolusMg) * Number(bolus.maxH)

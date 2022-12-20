@@ -1,10 +1,10 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, Button } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, } from '@mui/material'
+import React, { useContext } from 'react'
 import { Context, Laakeannos } from '../context/context'
 
 export const Yhteensa : React.FC = () : React.ReactElement => {
 
-    const { ohje, setOhje, mlVrkSumma, summaTaulukko, getIndex, nacl, bolusSumma } = useContext(Context)
+    const { ohje, mlVrkSumma, summaTaulukko, getIndex, bolusSumma, laakeTaulukko } = useContext(Context)
 
   return (
     <TableContainer sx={{width:"29.5%", marginLeft:"0.5%"}}>
@@ -12,8 +12,22 @@ export const Yhteensa : React.FC = () : React.ReactElement => {
       <TableHead>
         <TableRow sx={{backgroundColor:"lightgreen"}}>
         <TableCell>Yhteensä</TableCell>
-          <TableCell align="center">{(bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) + nacl.mgVrk / mlVrkSumma * 50).toFixed(2)}</TableCell>
-          <TableCell align="center">{((bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) + nacl.mgVrk / mlVrkSumma * 50) * 2).toFixed(2)}</TableCell>
+          <TableCell align="center">
+            {
+              Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+              ? (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
+                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)).toFixed(2)
+              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)).toFixed(2)
+            }
+          </TableCell>
+          <TableCell align="center">
+          {
+              Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+              ? ((bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0)
+                + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma * 50)) * 2).toFixed(2)
+              : (bolusSumma.reduce((prev : number, next : number) => {return prev + next}, 0) * 2).toFixed(2)
+            }
+          </TableCell>
         </TableRow>
         <TableRow>
         <TableCell>ml/h huomioiden oletettu käyttöaika</TableCell>
@@ -29,26 +43,23 @@ export const Yhteensa : React.FC = () : React.ReactElement => {
             :{}
             }>vrk</TableCell>
                 <TableCell align="center">{
-                (
-                          (
-                            summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) 
-                            + (nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50 / (nacl.mgVrk / nacl.laVahvuus)
-                          )
-                          
-                          / getIndex()
-                ).toFixed(2)
+          
+            Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+            ? ((summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0)
+              + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma 
+              / laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk!
+              * 50)) / (getIndex() + 1)).toFixed(2)
+            : (summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) / getIndex()).toFixed(2)
+          
 
                 }</TableCell>
-                                <TableCell align="center">{
-                (
-                          (
-                            summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) 
-                            + (nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50 / (nacl.mgVrk / nacl.laVahvuus)
-                          )
-                          
-                          / getIndex()
-                          * 2
-                ).toFixed(2)
+                <TableCell align="center">{
+                  Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+                  ? ((summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0)
+                    + Number(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk! / mlVrkSumma 
+                    / laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]!.mgVrk!
+                    * 50)) / (getIndex() + 1) * 2).toFixed(2)
+                  : (summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) / getIndex() * 2).toFixed(2)
                 }</TableCell>
                 </TableRow>
                 <TableRow>
@@ -64,7 +75,6 @@ export const Yhteensa : React.FC = () : React.ReactElement => {
                 (
                           (
                             summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) 
-                            + (nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50 / (nacl.mgVrk / nacl.laVahvuus)
                           )
                           
                           / getIndex()
@@ -76,8 +86,7 @@ export const Yhteensa : React.FC = () : React.ReactElement => {
                   {
                 (
                           (
-                            summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0) 
-                            + (nacl.mgVrk / nacl.laVahvuus) / mlVrkSumma * 50 / (nacl.mgVrk / nacl.laVahvuus)
+                            summaTaulukko.reduce((prev : number, next : number) => {return prev + next}, 0)
                           )
                           
                           / getIndex()

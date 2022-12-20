@@ -1,20 +1,27 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton, DialogContentText, DialogActions, Dialog, DialogContent, Button } from '@mui/material'
+import ClearIcon from '@mui/icons-material/Clear';
 import React, { useContext, useEffect, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
+import { Valinta } from './Valinta';
 
-interface Muokkaus{
-  paalla : boolean
-  tiedot : Laakeannos
-}
+
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, nacl, ohje, setLaakeTaulukko } = useContext(Context)
-    const [muokkausTila, setMuokkaustila] = useState<Muokkaus>({
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila } = useContext(Context)
+
+    const [vahvuusMuok, setVahvuusMuok] = useState<any>({
       paalla : false,
-      tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}
-    });
+      arvo : 0,
+      dialog : false,
+      nimi : "",
+      muutos : 0
+    }) 
+
+    const poisto = (indeksi : number) => {
+      setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))
+      localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko))
+    }
 
     useEffect(() => {
       if ((muokkausTila.tiedot.valmiste !== "") && (muokkausTila.tiedot.laVahvuus !== 0) && (muokkausTila.tiedot.mgVrk !== 0))
@@ -22,6 +29,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
         setLaakeTaulukko([...laakeTaulukko, muokkausTila.tiedot])
         setMuokkaustila({...muokkausTila, paalla : false,
           tiedot : {valmiste : "", laVahvuus: 0, mgVrk : 0}})
+        localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko))
       }
     }, [muokkausTila])
     
@@ -42,48 +50,58 @@ export const Taulukko : React.FC = () : React.ReactElement => {
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow>
-          <TableCell>{nacl.valmiste}</TableCell>
-          <TableCell align="center">{nacl.laVahvuus}</TableCell>
-          <TableCell align="center"></TableCell>
-          <TableCell align="center"
-          sx={
-            (ohje.sivu === 3)
-            ?{border:"5px solid blue"}
-            :{}
-            }
-          ><TextField sx={{backgroundColor:"orange"}} defaultValue={nacl.mgVrk} onChange={(e) => nacl.mgVrk = e.target.value}/></TableCell>
-          <TableCell align="center"></TableCell>
-          <TableCell align="center"></TableCell>
-          <TableCell align="center">{(nacl.mgVrk / mlVrkSumma * 50).toFixed(2)}</TableCell>
-          <TableCell align="center">{(nacl.mgVrk / mlVrkSumma * 100).toFixed(2)}</TableCell>
-        </TableRow>
         { laakeTaulukko!.map((laake : Laakeannos, idx : number) => {
 
+          let nacl = laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi")[0]
           let mlVrk = laake.mgVrk / laake.laVahvuus;
           let mgH = mlVrk / 24 * laake.laVahvuus;
           let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
           let kasetti50 = mlVrk / mlVrkSumma * 50;
           let kasetti100 = mlVrk / mlVrkSumma * 100;
-          let riittavyys50kaVrk = kasetti50 / mlVrk;
+          // let riittavyys50kaVrk = kasetti50 / mlVrk;
+          let nacl50 = 0
+          let nacl100 = 0;
+
+          if (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
+          {
+            nacl50 = nacl!.mgVrk! / mlVrkSumma * 50;
+            nacl100 = nacl!.mgVrk! / mlVrkSumma * 100;
+          }
 
             return (
               <>
+              <Dialog open={vahvuusMuok.dialog}>
+                <DialogContent>
+                  <DialogContentText>
+                    Haluatko varmasti muuttaa lääkeaineen ({vahvuusMuok.nimi}) vahvuutta?
+                  </DialogContentText>
+
+                  <DialogActions>
+                    <Button onClick={() => {laakeTaulukko[vahvuusMuok.arvo].laVahvuus = vahvuusMuok.muutos;
+                    setVahvuusMuok({...vahvuusMuok, paalla : false, arvo : 0, dialog : false}); setLaakeTaulukko([...laakeTaulukko])}
+                    }>Vahvista muokkaus</Button>
+                    <Button onClick={() => setVahvuusMuok({...vahvuusMuok, paalla : false, arvo : 0, dialog : false})}>Peruuta</Button>
+                  </DialogActions>
+                </DialogContent>
+              </Dialog>
               <TableRow key={idx}>
 
-                <TableCell>
-                  {
-                    (laake.valmiste === "Natriumkloridi")
-                    ? <Typography>{laake.valmiste}</Typography>
-                    : <TextField defaultValue={laake.valmiste} sx={{width:"100%"}}/>
-                  }
+                <TableCell> 
+                    <IconButton onClick={() => poisto(idx)}><ClearIcon/></IconButton>
+                    <Typography sx={{display:"inline-block", padding:"20px"}}>{laake.valmiste}</Typography>
                   </TableCell>
 
-                <TableCell align="center">
+                <TableCell 
+                sx={
+                  (ohje.sivu === 5)
+                  ?{border:"5px solid blue"}
+                  :{}
+                }
+                onDoubleClick={() => setVahvuusMuok({...vahvuusMuok, paalla : true, arvo : idx, nimi : laake.valmiste})} align="center">
                   {
-                    (laake.valmiste === "Natriumkloridi")
-                    ? <Typography>{laake.laVahvuus}</Typography>
-                    : <TextField defaultValue={laake.laVahvuus} sx={{width:"100%"}}/>
+                    (vahvuusMuok.paalla && vahvuusMuok.arvo === idx)
+                    ? <TextField onBlur={(e) => setVahvuusMuok({...vahvuusMuok, dialog : true, muutos : e.target.value})} defaultValue={laake.laVahvuus} sx={{width:"100%"}}/>
+                    : <Typography>{laake.laVahvuus}</Typography>
                   }
                   </TableCell>
 
@@ -95,7 +113,9 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   {
                     (laake.valmiste === "Natriumkloridi")
                     ? <></>
-                    : <TextField sx={{backgroundColor:"orange"}} defaultValue={laake.mgVrk} onChange={(e) => laakeTaulukko[idx].mgVrk = e.target.value}/>
+                    : <TextField sx={{backgroundColor:"orange", width:"150%"}} defaultValue={laake.mgVrk} onChange={(e) => {laakeTaulukko[idx].mgVrk = e.target.value; 
+                    setLaakeTaulukko([...laakeTaulukko])
+                    }}/>
                   }
                   </TableCell>
 
@@ -103,13 +123,39 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                 sx={
                   (ohje.sivu === 1)
                   ?{border:"5px solid blue"}
+                  :(ohje.sivu === 3 && laake.valmiste === "Natriumkloridi")
+                  ?{border:"5px solid blue"}
                   :{}
                   }>
-                <b>{(mlVrk) === 0 ?<></> :(mlVrk).toFixed(2)}</b></TableCell>
+                <b>
+                  {
+                  (laake.valmiste === "Natriumkloridi")
+                  ? <TextField sx={{backgroundColor:"orange", width:"150%"}} defaultValue={laake.mgVrk} onChange={(e) => {laakeTaulukko[idx].mgVrk = e.target.value;
+                    setLaakeTaulukko([...laakeTaulukko])
+                  }}/>
+                  : (mlVrk) === 0 
+                  ?<></> 
+                  :(mlVrk).toFixed(2)}</b>
+                
+                </TableCell>
                 <TableCell align="center">{(mgH) === 0 ?<></> :(mgH).toFixed(2)}</TableCell>
                 <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
-                <TableCell align="center">{(kasetti50) === 0 ?<></> :(kasetti50).toFixed(2)}</TableCell>
-                <TableCell align="center">{(kasetti100) === 0 ?<></> :(kasetti100).toFixed(2)}</TableCell>
+                <TableCell align="center">{
+                (laake.valmiste === "Natriumkloridi" && nacl50!)
+                ?(nacl50!).toFixed(2)
+                :(kasetti50) === 0 
+                ?<></>
+                :(kasetti50).toFixed(2)
+                }</TableCell>
+                <TableCell align="center">
+                {
+                (laake.valmiste === "Natriumkloridi" && nacl100!)
+                ?(nacl100!).toFixed(2)
+                :(kasetti100) === 0 
+                ?<></>
+                :(kasetti100).toFixed(2)
+                }
+                  </TableCell>
                 </TableRow>
               </>
             )
@@ -138,7 +184,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
   
               </TableCell>
             </>
-            : <TableCell><IconButton onClick={() => setMuokkaustila({...muokkausTila, paalla : true})}><AddIcon/>Muu (kirjaa mikä)</IconButton></TableCell>
+            : <TableCell sx={{width:"90%"}}><Valinta/></TableCell>
           }
         </TableRow>
                     <TableRow>
