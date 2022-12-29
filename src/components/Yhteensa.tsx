@@ -1,4 +1,4 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, } from '@mui/material'
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
 import React, { useContext } from 'react'
 import { Context, Laakeannos } from '../context/context'
 

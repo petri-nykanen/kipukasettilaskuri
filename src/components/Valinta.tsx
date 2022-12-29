@@ -1,33 +1,34 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import React, { useContext, useEffect } from 'react'
-import { Context,} from '../context/context'
+import React, { useContext } from 'react'
+import { Context } from '../context/context'
 
 export const Valinta : React.FC = () : React.ReactElement => {
 
-    const { vaihtoehdot, laakeTaulukko, setLaakeTaulukko, muokkausTila, setMuokkaustila } = useContext(Context)
+    const { vaihtoehdot, setVaihtoehdot, laakeTaulukko, setLaakeTaulukko, setMuokkaustila, muokkausTila } = useContext(Context)
 
     const handleChange = (event: SelectChangeEvent) => {
-        if (!new Set(laakeTaulukko).has(event.target.value))
+
+      if (event.target.value === "Muu")
         {
-          if (event.target.value === "Muu"){
-            setMuokkaustila({...muokkausTila, paalla : true})
-          }
-          else {setLaakeTaulukko([...laakeTaulukko, event.target.value])};
+          setMuokkaustila({...muokkausTila, paalla : true})
+        }
+      else
+        {
+          setVaihtoehdot(vaihtoehdot.filter((el : any) => el !== event.target.value))
+          setLaakeTaulukko([...laakeTaulukko, event.target.value]);
         }
       };
-
-    useEffect(() => {
-      localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko));
-    }, [laakeTaulukko])
-    
+        
     
   return (
 <FormControl sx={{width:"100%", margin:"10px"}}>
-  <InputLabel id="demo-simple-select-label">Lisää lääkeaine</InputLabel>
+  <InputLabel shrink={false} id="demo-simple-select-label">Lisää lääkeaine</InputLabel>
   <Select
+    displayEmpty
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    onChange={handleChange}
+    value={""}
+    onChange={(e : SelectChangeEvent) => handleChange(e)}
   >
     {
         vaihtoehdot.map((laake : any, idx : number ) => {

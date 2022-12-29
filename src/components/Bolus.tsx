@@ -15,7 +15,7 @@ export const Bolus : React.FC = () : React.ReactElement => {
           <TableCell align="center"></TableCell>
           <TableCell align="center"></TableCell>
           <TableCell align="center">bolus ml</TableCell>
-          <TableCell align="center">max bol/h</TableCell>
+          <TableCell align="center">max bol lkm/h</TableCell>
           <TableCell align="center">lukko (min)</TableCell>
         </TableRow>
 
@@ -66,11 +66,7 @@ export const Bolus : React.FC = () : React.ReactElement => {
               <TableRow key={idx}>
 
                 <TableCell>
-                  {
-                    (laake.valmiste === "Natriumkloridi (9 mg/ml)")
-                    ? <Typography>{laake.valmiste}</Typography>
-                    : <TextField defaultValue={laake.valmiste} sx={{width:"100%"}}/>
-                  }
+                    <Typography>{laake.valmiste}</Typography>
                   </TableCell>
 
                   <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>

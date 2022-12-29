@@ -8,7 +8,7 @@ import { Valinta } from './Valinta';
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot } = useContext(Context)
 
     const [vahvuusMuok, setVahvuusMuok] = useState<any>({
       paalla : false,
@@ -20,7 +20,27 @@ export const Taulukko : React.FC = () : React.ReactElement => {
 
     const poisto = (indeksi : number) => {
       setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))
-      localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko))
+      if (
+        laakeTaulukko[indeksi].valmiste === "Morfiini"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Oksikodoni"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Hydromorfiini"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Haloperidoli"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Midatsolaami"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Glykopyrroni"
+        ||
+        laakeTaulukko[indeksi].valmiste === "Natriumkloridi"
+        )
+      setVaihtoehdot([...vaihtoehdot, laakeTaulukko[indeksi]].sort((a : Laakeannos, b : Laakeannos) => {
+        if(a.valmiste > b.valmiste)
+          return 1
+        else
+          return -1
+      }))
     }
 
     useEffect(() => {

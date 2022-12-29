@@ -44,10 +44,12 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
     const [laakeTaulukko, setLaakeTaulukko] = useState<Laakeannos[]>(
       !localStorage.getItem("laakeaineet")
       ? []
-      : JSON.parse(localStorage.getItem("laakeaineet")!
-      ))
+      : JSON.parse(localStorage.getItem("laakeaineet")!)
+      )
 
-    const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>([
+    const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>(
+    (!localStorage.getItem("valinta"))
+    ?[
       {
         valmiste: "Morfiini",
         laVahvuus: 20,
@@ -82,9 +84,20 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
         valmiste: "Natriumkloridi",
         laVahvuus: 9,
         mgVrk: 10
-      },
-      
-    ])
+      }
+    ].sort((a : Laakeannos, b : Laakeannos) => {
+      if(a.valmiste > b.valmiste)
+        return 1
+      else
+        return -1
+    })
+    :JSON.parse(localStorage.getItem("valinta")!).sort((a : Laakeannos, b : Laakeannos) => {
+      if(a.valmiste > b.valmiste)
+        return 1
+      else
+        return -1
+    })
+    )
 
     const paivitaTaulukko = () => {
       if (laakeTaulukko.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
@@ -95,13 +108,6 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       else {
         setMlVrkSumma(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0))
       }
-    }
-
-    const haeData = () => {
-      if (localStorage.getItem("laakeaineet"))
-        setLaakeTaulukko(JSON.parse(localStorage.getItem("laakeaineet")!))
-      else
-      localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko))
     }
 
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(
@@ -158,11 +164,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
     useEffect(() => {
         paivitaTaulukko()
+        localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko));
+        localStorage.setItem("valinta", JSON.stringify(vaihtoehdot.filter((el : any) => !laakeTaulukko!.includes(el))));
     }, [laakeTaulukko])
-
-    useEffect(() => {
-      haeData();
-    }, [localStorage.getItem("laakeaineet")!])
     
   return (
     <Context.Provider value={{

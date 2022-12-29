@@ -12,7 +12,7 @@ export const BolusYhteensa : React.FC = () : React.ReactElement => {
     <Table sx={{ borderRadius:"10px", backgroundColor:"lightgray", boxShadow: 5}} aria-label="simple table">
       <TableHead>
         <TableRow sx={{backgroundColor:"lightgreen"}}>
-        <TableCell>Max bol/h huomioiden oletettu käyttöaika</TableCell>
+        <TableCell>Max bol lkm/h huomioiden oletettu käyttöaika</TableCell>
         <TableCell align="center">riittävyys (50ml)</TableCell>
           <TableCell align="center">riittävyys (100ml)</TableCell>
         </TableRow>
