@@ -65,8 +65,8 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           <TableCell align="center">ml/vrk</TableCell>
           <TableCell align="center">mg/h</TableCell>
           <TableCell align="center">pit mg/ml</TableCell>
-          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelijassa ml 50</TableCell>
-          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelijassa ml 100</TableCell>
+          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelija ml 50</TableCell>
+          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelija ml 100</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
