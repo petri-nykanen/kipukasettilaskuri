@@ -17,7 +17,7 @@ export const BolusYhteensa : React.FC = () : React.ReactElement => {
           <TableCell align="center">riittävyys (100ml)</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell>h</TableCell>
+          <TableCell>vrk</TableCell>
           <TableCell align="center">
             {
             (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)
@@ -36,7 +36,7 @@ export const BolusYhteensa : React.FC = () : React.ReactElement => {
       </TableHead>
       <TableBody>
       <TableRow>
-          <TableCell align="left">vrk</TableCell>
+          <TableCell align="left">h</TableCell>
           <TableCell align="center">
           {
             (laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0)

@@ -42,7 +42,7 @@ function App() {
           ? 
           <>
           <Typography sx={{padding:"20px"}}>
-          Määrää tarvittaessa NaCl tilavuus (oranssi kenttä) pyrkien pieneen infuusionopeuteen (0,1-2,0 ml/h), tarkista samalla kasetin riittävyys vuorokausissa (vrk) ja tuntia (h)
+          Määrää tarvittaessa NaCl tilavuus (oranssi kenttä) pyrkien pieneen infuusionopeuteen (0,1-2,0 ml/h), tarkista samalla lääkeannostelijan riittävyys vuorokausissa (vrk) ja tuntia (h)
 
 
           </Typography>

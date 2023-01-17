@@ -65,8 +65,8 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           <TableCell align="center">ml/vrk</TableCell>
           <TableCell align="center">mg/h</TableCell>
           <TableCell align="center">pit mg/ml</TableCell>
-          <TableCell sx={{backgroundColor:"lightgreen"}} align="center">kasetissa ml 50</TableCell>
-          <TableCell sx={{backgroundColor:"lightgreen"}} align="center">kasetissa ml 100</TableCell>
+          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelijassa ml 50</TableCell>
+          <TableCell sx={{backgroundColor:"lightgreen", fontSize:"12px"}} align="center">lääke-{<br></br>}annostelijassa ml 100</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -108,7 +108,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
 
                 <TableCell> 
                     <IconButton onClick={() => poisto(idx)}><ClearIcon/></IconButton>
-                    <Typography sx={{display:"inline-block", padding:"20px"}}>{laake.valmiste}</Typography>
+                    <Typography sx={{display:"inline-block"}}>{laake.valmiste}</Typography>
                   </TableCell>
 
                 <TableCell 
@@ -162,18 +162,18 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                 <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
                 <TableCell align="center">{
                 (laake.valmiste === "Natriumkloridi" && nacl50!)
-                ?(nacl50!).toFixed(2)
+                ?(nacl50!).toFixed(1)
                 :(kasetti50) === 0 
                 ?<></>
-                :(kasetti50).toFixed(2)
+                :(kasetti50).toFixed(1)
                 }</TableCell>
                 <TableCell align="center">
                 {
                 (laake.valmiste === "Natriumkloridi" && nacl100!)
-                ?(nacl100!).toFixed(2)
+                ?(nacl100!).toFixed(1)
                 :(kasetti100) === 0 
                 ?<></>
-                :(kasetti100).toFixed(2)
+                :(kasetti100).toFixed(1)
                 }
                   </TableCell>
                 </TableRow>
@@ -208,19 +208,20 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           }
         </TableRow>
                     <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell sx={
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ><Typography fontSize={"12px"} sx={{paddingLeft:"2"}}>Infuusionopeus</Typography></TableCell>
+                        <TableCell
+                         sx={
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
                   } align="center">{mlVrkSumma.toFixed(2)} ml/vrk</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ><Typography fontSize={"12px"}>Infuusionopeus</Typography></TableCell>
                         <TableCell sx={
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
