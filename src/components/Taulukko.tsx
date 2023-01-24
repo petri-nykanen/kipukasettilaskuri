@@ -155,11 +155,11 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   }}/>
                   : (mlVrk) === 0 
                   ?<></> 
-                  :(mlVrk).toFixed(2)}</b>
+                  :(Math.round(mlVrk * 100) / 100).toFixed(2)}</b>
                 
                 </TableCell>
-                <TableCell align="center">{(mgH) === 0 ?<></> :(mgH).toFixed(2)}</TableCell>
-                <TableCell align="center">{(pitMgMl) === 0 ?<></> :(pitMgMl).toFixed(2)}</TableCell>
+                <TableCell align="center">{(mgH) === 0 ?<></> :(Math.round(mgH * 100) / 100).toFixed(2)}</TableCell>
+                <TableCell align="center">{(pitMgMl) === 0 ?<></> :(Math.round(pitMgMl * 100) / 100).toFixed(2)}</TableCell>
                 <TableCell align="center">{
                 (laake.valmiste === "Natriumkloridi" && nacl50!)
                 ?(nacl50!).toFixed(1)
