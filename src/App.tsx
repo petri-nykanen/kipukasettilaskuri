@@ -2,6 +2,7 @@ import { Button, Container, Typography } from '@mui/material';
 import React, { useContext, useRef, } from 'react';
 import { Bolus } from './components/Bolus';
 import { BolusYhteensa } from './components/BolusYhteensa';
+import { Footer } from './components/Footer';
 import { Taulukko } from './components/Taulukko';
 import { Valinta } from './components/Valinta';
 import { Yhteensa } from './components/Yhteensa';
@@ -98,6 +99,7 @@ function App() {
       </Container>
       :<></>
       }
+    <Footer/>
     </Container>
     
   </>
