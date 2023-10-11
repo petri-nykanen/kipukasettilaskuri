@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import laakeaineet from "../laakeaineet.json";
 
 export const Context: React.Context<any> = createContext(undefined);
 
@@ -46,52 +47,14 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
 
   const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>(
     !localStorage.getItem("valinta")
-      ? [
-          {
-            valmiste: "Morfiini",
-            laVahvuus: 20,
-            mgVrk: 30
-          },
-          {
-            valmiste: "Oksikodoni",
-            laVahvuus: 10,
-            mgVrk: 0
-          },
-          {
-            valmiste: "Hydromorfiini",
-            laVahvuus: 50,
-            mgVrk: 0
-          },
-          {
-            valmiste: "Haloperidoli",
-            laVahvuus: 5,
-            mgVrk: 5
-          },
-          {
-            valmiste: "Midatsolaami",
-            laVahvuus: 5,
-            mgVrk: 0
-          },
-          {
-            valmiste: "Glykopyrroni",
-            laVahvuus: 0.2,
-            mgVrk: 1.2
-          },
-          {
-            valmiste: "Natriumkloridi",
-            laVahvuus: 9,
-            mgVrk: 10
-          }
-        ].sort((a: Laakeannos, b: Laakeannos) => {
+      ? laakeaineet.sort((a: Laakeannos, b: Laakeannos) => {
           if (a.valmiste > b.valmiste) return 1;
           else return -1;
         })
-      : JSON.parse(String(localStorage.getItem("valinta"))).sort(
-          (a: Laakeannos, b: Laakeannos) => {
-            if (a.valmiste > b.valmiste) return 1;
-            else return -1;
-          }
-        )
+      : JSON.parse(String(localStorage.getItem("valinta"))).sort((a: Laakeannos, b: Laakeannos) => {
+          if (a.valmiste > b.valmiste) return 1;
+          else return -1;
+        })
   );
 
   const paivitaTaulukko = () => {

@@ -1,6 +1,6 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import React, { useContext } from "react";
-import { Context, Laakeannos } from "../context/context";
+import { Context, Laakeannos } from "../../context/context";
 
 export const BolusYhteensa: React.FC = (): React.ReactElement => {
   const { bolus, bolusSumma, mlVrkSumma, laakeTaulukko } = useContext(Context);
@@ -9,8 +9,8 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
   }, 0);
 
   return (
-    <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%", borderRadius: "20px" }}>
-      <Table sx={{ borderRadius: "10px", backgroundColor: "lightgray" }}>
+    <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%" }}>
+      <Table sx={{ backgroundColor: "lightgray" }}>
         <TableHead>
           <TableRow sx={{ backgroundColor: "lightgreen" }}>
             <TableCell>Max bol lkm/h huomioiden oletettu käyttöaika</TableCell>

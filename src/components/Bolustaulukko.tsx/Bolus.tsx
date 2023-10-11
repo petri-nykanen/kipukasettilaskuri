@@ -9,22 +9,28 @@ import {
   Typography
 } from "@mui/material";
 import React, { useContext } from "react";
-import { Context, Laakeannos } from "../context/context";
+import { Context, Laakeannos } from "../../context/context";
 
 export const Bolus: React.FC = (): React.ReactElement => {
   const { ohje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context);
 
   return (
     <TableContainer sx={{ width: "70%", border: "3px solid #259443", boxShadow: 3 }}>
-      <Table sx={{ backgroundColor: "lightgray", boxShadow: 5 }} aria-label="simple table">
+      <Table sx={{ backgroundColor: "lightgray" }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Boluksien määritys</TableCell>
-            <TableCell align="center" />
-            <TableCell align="center" />
-            <TableCell align="center">bolus ml</TableCell>
-            <TableCell align="center">max bol lkm/h</TableCell>
-            <TableCell align="center">lukko (min)</TableCell>
+            <TableCell sx={{ backgroundColor: "#259443" }}>Boluksien määritys</TableCell>
+            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
+            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
+            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+              bolus ml
+            </TableCell>
+            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+              max bol lkm/h
+            </TableCell>
+            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+              lukko (min)
+            </TableCell>
           </TableRow>
 
           <TableRow>
@@ -76,21 +82,21 @@ export const Bolus: React.FC = (): React.ReactElement => {
                     </TableCell>
 
                     <TableCell align="center">
-                      {pitMgMl === 0 ? <></> : pitMgMl.toFixed(2)}
+                      {pitMgMl === 0 ? null : pitMgMl.toFixed(2)}
                     </TableCell>
 
                     <TableCell align="center">
-                      {pitMgMl === 0 ? <></> : pitoisuus.toFixed(2)}
+                      {pitMgMl === 0 ? null : pitoisuus.toFixed(2)}
                     </TableCell>
 
                     <TableCell align="center">
-                      <b>{bolusMg === 0 ? <></> : bolusMg.toFixed(2)}</b>
+                      <b>{bolusMg === 0 ? null : bolusMg.toFixed(2)}</b>
                     </TableCell>
                     <TableCell align="center">
-                      {maxBolMgH === 0 ? <></> : maxBolMgH.toFixed(2)}
+                      {maxBolMgH === 0 ? null : maxBolMgH.toFixed(2)}
                     </TableCell>
                     <TableCell align="center">
-                      {maxLisa === 0 ? <></> : maxLisa.toFixed(2)}
+                      {maxLisa === 0 ? null : maxLisa.toFixed(2)}
                     </TableCell>
                   </TableRow>
                 </>

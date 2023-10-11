@@ -1,6 +1,6 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import React, { useContext } from "react";
-import { Context, Laakeannos } from "../context/context";
+import { Context, Laakeannos } from "../../context/context";
 
 export const Yhteensa: React.FC = (): React.ReactElement => {
   const { ohje, mlVrkSumma, summaTaulukko, getIndex, bolusSumma, laakeTaulukko } =
