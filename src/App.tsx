@@ -7,6 +7,7 @@ import { Valinta } from "./components/Valinta";
 import { Yhteensa } from "./components/Valmistetaulukko/Yhteensa";
 import { Context } from "./context/context";
 import TaulukkoContainer from "./components/Valmistetaulukko/Taulukko-container";
+import Header from "./components/Header";
 
 function App() {
   const { ohje, setOhje, laakeTaulukko } = useContext(Context);
@@ -103,7 +104,9 @@ function App() {
   };
 
   return (
-    <Container sx={{ width: "1200px", display: "flex", flexWrap: "wrap" }}>
+    <Container sx={{ width: "1300px", display: "flex", flexWrap: "wrap" }}>
+      <Header />
+      <br />
       {renderInstructions()}
       <br />
       {ohje.auki === false && laakeTaulukko.length > 0 ? (
@@ -112,7 +115,7 @@ function App() {
           sx={{ margin: "10px", display: "block" }}
           onClick={() => setOhje({ ...ohje, auki: true, sivu: 1 })}
         >
-          OHJE
+          Ohje
         </Button>
       ) : null}
 

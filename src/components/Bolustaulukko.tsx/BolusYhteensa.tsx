@@ -10,7 +10,7 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
 
   return (
     <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%" }}>
-      <Table sx={{ backgroundColor: "lightgray" }}>
+      <Table sx={{ backgroundColor: "#cfffdd" }}>
         <TableHead>
           <TableRow sx={{ backgroundColor: "lightgreen" }}>
             <TableCell>Max bol lkm/h huomioiden oletettu käyttöaika</TableCell>

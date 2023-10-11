@@ -9,7 +9,7 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
   return (
     <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%" }}>
       <Table
-        sx={{ backgroundColor: "lightgray", border: "5px solid lightgreen" }}
+        sx={{ backgroundColor: "#cfffdd", border: "5px solid lightgreen" }}
         aria-label="simple table"
       >
         <TableHead>

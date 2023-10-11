@@ -27,7 +27,7 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
     useContext(Context);
 
   return (
-    <Table sx={{ backgroundColor: "lightgray" }}>
+    <Table sx={{ backgroundColor: "#cfffdd" }}>
       <TaulukkoDialog vahvuusMuok={vahvuusMuok} setVahvuusMuok={setVahvuusMuok} />
 
       <TableHead>
@@ -83,7 +83,6 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
           return (
             <>
               <TableRow>
-
                 <TableCell>
                   <IconButton onClick={() => poisto(idx)}>
                     <ClearIcon />

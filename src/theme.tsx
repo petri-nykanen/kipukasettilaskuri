@@ -1,9 +1,9 @@
 import { Theme, createTheme } from "@mui/material";
-import Oswald from "../src/"
+import "@fontsource-variable/quicksand";
 
 export const theme: Theme = createTheme({
   typography: {
-    fontFamily: "Nunito Sans",
+    fontFamily: "Quicksand Variable",
     fontWeightRegular: 400,
     fontSize: 15
   },
@@ -16,14 +16,6 @@ export const theme: Theme = createTheme({
     }
   },
   components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        @font-face {
-          font-family: 'Nunito Sans';
-          src: local('NunitoSans'), url(${Oswald}) format('truetype');
-        }
-      `
-    },
     MuiAppBar: {
       defaultProps: {
         color: "default"
@@ -58,8 +50,5 @@ export const theme: Theme = createTheme({
         }
       }
     }
-  },
-  shape: {
-    borderRadius: 15
   }
 });

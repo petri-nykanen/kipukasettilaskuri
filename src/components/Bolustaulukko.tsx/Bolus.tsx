@@ -16,7 +16,7 @@ export const Bolus: React.FC = (): React.ReactElement => {
 
   return (
     <TableContainer sx={{ width: "70%", border: "3px solid #259443", boxShadow: 3 }}>
-      <Table sx={{ backgroundColor: "lightgray" }} aria-label="simple table">
+      <Table sx={{ backgroundColor: "#cfffdd" }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ backgroundColor: "#259443" }}>Boluksien määritys</TableCell>
