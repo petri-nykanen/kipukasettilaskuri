@@ -22,18 +22,22 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
             <TableCell align="center">
               {laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
                 .length > 0
-                ? (
-                    (kasetti50 +
-                      Number(
-                        (laakeTaulukko?.filter(
-                          (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
-                        )[0].mgVrk /
-                          mlVrkSumma) *
-                          50
-                      )) /
-                    (mlVrkSumma + bolus.ml * bolus.maxH * 24)
-                  ).toFixed(2)
-                : (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)}
+                ? String(
+                    (
+                      (kasetti50 +
+                        Number(
+                          (laakeTaulukko?.filter(
+                            (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
+                          )[0].mgVrk /
+                            mlVrkSumma) *
+                            50
+                        )) /
+                      (mlVrkSumma + bolus.ml * bolus.maxH * 24)
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                : String(
+                    (kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
             <TableCell align="center">
               {laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
@@ -50,7 +54,9 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
                       (mlVrkSumma + bolus.ml * bolus.maxH * 24)) *
                     2
                   ).toFixed(2)
-                : ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 2).toFixed(2)}
+                : String(
+                    ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 2).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -72,25 +78,31 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
                       (mlVrkSumma + bolus.ml * bolus.maxH * 24)) *
                     24
                   ).toFixed(2)
-                : ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 24).toFixed(2)}
+                : String(
+                    ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 24).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
             <TableCell align="center">
               {laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
                 .length > 0
-                ? (
-                    ((kasetti50 +
-                      Number(
-                        (laakeTaulukko?.filter(
-                          (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
-                        )[0]?.mgVrk /
-                          mlVrkSumma) *
-                          50
-                      )) /
-                      (mlVrkSumma + bolus.ml * bolus.maxH * 24)) *
-                    24 *
-                    2
-                  ).toFixed(2)
-                : ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 24 * 2).toFixed(2)}
+                ? String(
+                    (
+                      ((kasetti50 +
+                        Number(
+                          (laakeTaulukko?.filter(
+                            (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
+                          )[0]?.mgVrk /
+                            mlVrkSumma) *
+                            50
+                        )) /
+                        (mlVrkSumma + bolus.ml * bolus.maxH * 24)) *
+                      24 *
+                      2
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                : String(
+                    ((kasetti50 / (mlVrkSumma + bolus.ml * bolus.maxH * 24)) * 24 * 2).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
           </TableRow>
         </TableBody>

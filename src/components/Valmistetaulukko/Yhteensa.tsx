@@ -20,47 +20,55 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
                 laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
                   .length > 0
               )
-                ? (
-                    bolusSumma.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) +
-                    Number(
-                      (laakeTaulukko?.filter(
-                        (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
-                      )[0]?.mgVrk /
-                        mlVrkSumma) *
-                        50
-                    )
-                  ).toFixed(2)
-                : bolusSumma
-                    .reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0)
-                    .toFixed(2)}
-            </TableCell>
-            <TableCell align="center">
-              {Number(
-                laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
-                  .length > 0
-              )
-                ? (
-                    (bolusSumma.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) +
+                ? String(
+                    (
+                      bolusSumma.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) +
                       Number(
                         (laakeTaulukko?.filter(
                           (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
                         )[0]?.mgVrk /
                           mlVrkSumma) *
                           50
-                      )) *
-                    2
-                  ).toFixed(2)
-                : (
-                    bolusSumma.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) * 2
-                  ).toFixed(2)}
+                      )
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                : String(
+                    bolusSumma
+                      .reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0)
+                      .toFixed(2)
+                  ).replace(".", ",")}
+            </TableCell>
+            <TableCell align="center">
+              {Number(
+                laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
+                  .length > 0
+              )
+                ? String(
+                    (
+                      (bolusSumma.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) +
+                        Number(
+                          (laakeTaulukko?.filter(
+                            (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
+                          )[0]?.mgVrk /
+                            mlVrkSumma) *
+                            50
+                        )) *
+                      2
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                : String(
+                    (
+                      bolusSumma.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) * 2
+                    ).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
           </TableRow>
           <TableRow>
@@ -71,7 +79,10 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell align="left" sx={ohje.sivu === 3 ? { border: "5px solid blue" } : {}}>
+            <TableCell
+              align="left"
+              sx={ohje.sivu === 3 ? { boxShadow: "inset -1px 0px 10px 2px blue" } : {}}
+            >
               vrk
             </TableCell>
             <TableCell align="center">
@@ -79,27 +90,31 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
                 laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")
                   .length > 0
               )
-                ? (
-                    (summaTaulukko.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) +
-                      Number(
-                        (laakeTaulukko?.filter(
-                          (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
-                        )[0]?.mgVrk /
-                          mlVrkSumma /
-                          laakeTaulukko?.filter(
+                ? String(
+                    (
+                      (summaTaulukko.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) +
+                        Number(
+                          (laakeTaulukko?.filter(
                             (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
-                          )[0]?.mgVrk) *
-                          50
-                      )) /
-                    (getIndex() + 1)
-                  ).toFixed(2)
-                : (
-                    summaTaulukko.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) / getIndex()
-                  ).toFixed(2)}
+                          )[0]?.mgVrk /
+                            mlVrkSumma /
+                            laakeTaulukko?.filter(
+                              (elem: Laakeannos) => elem.valmiste === "Natriumkloridi"
+                            )[0]?.mgVrk) *
+                            50
+                        )) /
+                      (getIndex() + 1)
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                : String(
+                    (
+                      summaTaulukko.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) / getIndex()
+                    ).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
             <TableCell align="center">
               {Number(
@@ -123,37 +138,46 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
                       (getIndex() + 1)) *
                     2
                   ).toFixed(2)
-                : (
-                    (summaTaulukko.reduce((prev: number, next: number) => {
-                      return prev + next;
-                    }, 0) /
-                      getIndex()) *
-                    2
-                  ).toFixed(2)}
+                : String(
+                    (
+                      (summaTaulukko.reduce((prev: number, next: number) => {
+                        return prev + next;
+                      }, 0) /
+                        getIndex()) *
+                      2
+                    ).toFixed(2)
+                  ).replace(".", ",")}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="left" sx={ohje.sivu === 3 ? { border: "5px solid blue" } : {}}>
+            <TableCell
+              align="left"
+              sx={ohje.sivu === 3 ? { boxShadow: "inset -1px 0px 10px 2px blue" } : {}}
+            >
               h
             </TableCell>
             <TableCell align="center">
-              {(
-                (summaTaulukko.reduce((prev: number, next: number) => {
-                  return prev + next;
-                }, 0) /
-                  getIndex()) *
-                24
-              ).toFixed(2)}
+              {String(
+                (
+                  (summaTaulukko.reduce((prev: number, next: number) => {
+                    return prev + next;
+                  }, 0) /
+                    getIndex()) *
+                  24
+                ).toFixed(2)
+              ).replace(".", ",")}
             </TableCell>
             <TableCell align="center">
-              {(
-                (summaTaulukko.reduce((prev: number, next: number) => {
-                  return prev + next;
-                }, 0) /
-                  getIndex()) *
-                24 *
-                2
-              ).toFixed(2)}
+              {String(
+                (
+                  (summaTaulukko.reduce((prev: number, next: number) => {
+                    return prev + next;
+                  }, 0) /
+                    getIndex()) *
+                  24 *
+                  2
+                ).toFixed(2)
+              ).replace(".", ",")}
             </TableCell>
           </TableRow>
         </TableBody>

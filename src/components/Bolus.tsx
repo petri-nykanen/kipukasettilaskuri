@@ -9,28 +9,22 @@ import {
   Typography
 } from "@mui/material";
 import React, { useContext } from "react";
-import { Context, Laakeannos } from "../../context/context";
+import { Context, Laakeannos } from "../context/context";
 
 export const Bolus: React.FC = (): React.ReactElement => {
   const { ohje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context);
 
   return (
     <TableContainer sx={{ width: "70%", border: "3px solid #259443", boxShadow: 3 }}>
-      <Table sx={{ backgroundColor: "#cfffdd" }} aria-label="simple table">
+      <Table sx={{ backgroundColor: "lightgray", boxShadow: 5 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ backgroundColor: "#259443" }}>Boluksien määritys</TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
-              bolus ml
-            </TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
-              max bol lkm/h
-            </TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
-              lukko (min)
-            </TableCell>
+            <TableCell>Boluksien määritys</TableCell>
+            <TableCell align="center" />
+            <TableCell align="center" />
+            <TableCell align="center">bolus ml</TableCell>
+            <TableCell align="center">max bol lkm/h</TableCell>
+            <TableCell align="center">lukko (min)</TableCell>
           </TableRow>
 
           <TableRow>
@@ -90,21 +84,21 @@ export const Bolus: React.FC = (): React.ReactElement => {
                     </TableCell>
 
                     <TableCell align="center">
-                      {pitMgMl === 0 ? null : String(pitMgMl.toFixed(2)).replace(".", ",")}
+                      {pitMgMl === 0 ? <></> : String(pitMgMl.toFixed(2)).replace(".", ",")}
                     </TableCell>
 
                     <TableCell align="center">
-                      {pitMgMl === 0 ? null : String(pitoisuus.toFixed(2)).replace(".", ",")}
+                      {pitMgMl === 0 ? <></> : String(pitoisuus.toFixed(2)).replace(".", ",")}
                     </TableCell>
 
                     <TableCell align="center">
-                      <b>{bolusMg === 0 ? null : String(bolusMg.toFixed(2)).replace(".", ",")}</b>
+                      <b>{bolusMg === 0 ? <></> : String(bolusMg.toFixed(2)).replace(".", ",")}</b>
                     </TableCell>
                     <TableCell align="center">
-                      {maxBolMgH === 0 ? null : String(maxBolMgH.toFixed(2)).replace(".", ",")}
+                      {maxBolMgH === 0 ? <></> : String(maxBolMgH.toFixed(2)).replace(".", ",")}
                     </TableCell>
                     <TableCell align="center">
-                      {maxLisa === 0 ? null : String(maxLisa.toFixed(2)).replace(".", ",")}
+                      {maxLisa === 0 ? <></> : String(maxLisa.toFixed(2)).replace(".", ",")}
                     </TableCell>
                   </TableRow>
                 </>

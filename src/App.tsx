@@ -1,4 +1,4 @@
-import { Button, Container, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { Bolus } from "./components/Bolustaulukko.tsx/Bolus";
 import { BolusYhteensa } from "./components/Bolustaulukko.tsx/BolusYhteensa";
@@ -6,7 +6,7 @@ import { Footer } from "./components/Footer";
 import { Valinta } from "./components/Valinta";
 import { Yhteensa } from "./components/Valmistetaulukko/Yhteensa";
 import { Context } from "./context/context";
-import TaulukkoContainer from "./components/Valmistetaulukko/Taulukko-container";
+import TaulukkoBox from "./components/Valmistetaulukko/Taulukko-container";
 import Header from "./components/Header";
 
 function App() {
@@ -104,7 +104,15 @@ function App() {
   };
 
   return (
-    <Container sx={{ width: "1300px", display: "flex", flexWrap: "wrap" }}>
+    <Box
+      sx={{
+        maxWidth: "1200px",
+        margin: "auto",
+        justifyContent: "center",
+        display: "flex",
+        flexWrap: "wrap"
+      }}
+    >
       <Header />
       <br />
       {renderInstructions()}
@@ -120,17 +128,17 @@ function App() {
       ) : null}
 
       {laakeTaulukko.length > 0 ? (
-        <Container sx={{ display: "flex", flexDirection: "column" }}>
-          <Container sx={{ display: "flex", flexDirection: "row" }}>
-            <TaulukkoContainer />
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <TaulukkoBox />
             <Yhteensa />
-          </Container>
+          </Box>
 
-          <Container sx={{ display: "flex", flexDirection: "row", mt: "1%" }}>
+          <Box sx={{ display: "flex", flexDirection: "row", mt: "1%" }}>
             <Bolus />
             <BolusYhteensa />
-          </Container>
-        </Container>
+          </Box>
+        </Box>
       ) : (
         <>
           <Typography sx={{ padding: "20px" }}>Aloita lisäämällä taulukkoon lääkeaine</Typography>
@@ -138,7 +146,7 @@ function App() {
         </>
       )}
       <Footer />
-    </Container>
+    </Box>
   );
 }
 

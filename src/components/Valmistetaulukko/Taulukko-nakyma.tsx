@@ -91,7 +91,7 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
                 </TableCell>
 
                 <TableCell
-                  sx={ohje.sivu === 5 ? { border: "5px solid blue" } : {}}
+                  sx={ohje.sivu === 5 ? { boxShadow: "inset -1px 0px 10px 2px blue" } : {}}
                   onDoubleClick={() =>
                     setVahvuusMuok({
                       ...vahvuusMuok,
@@ -108,19 +108,20 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
                         setVahvuusMuok({ ...vahvuusMuok, dialog: true, muutos: e.target.value })
                       }
                       defaultValue={laake.laVahvuus}
-                      sx={{ width: "100%" }}
+                      sx={{ width: "70%" }}
                     />
                   ) : (
                     <Typography>{laake.laVahvuus}</Typography>
                   )}
                 </TableCell>
 
-                <TableCell align="center" sx={ohje.sivu === 1 ? { border: "5px solid blue" } : {}}>
-                  {laake.valmiste === "Natriumkloridi" ? (
-                    <></>
-                  ) : (
+                <TableCell
+                  align="center"
+                  sx={ohje.sivu === 1 ? { boxShadow: "inset -1px 0px 10px 2px blue" } : {}}
+                >
+                  {laake.valmiste === "Natriumkloridi" ? null : (
                     <TextField
-                      sx={{ backgroundColor: "orange", width: "150%" }}
+                      sx={{ backgroundColor: "orange", width: "70%" }}
                       defaultValue={laake.mgVrk}
                       onChange={(e) => {
                         laakeTaulukko[idx].mgVrk = e.target.value;
@@ -134,52 +135,50 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
                   align="center"
                   sx={
                     ohje.sivu === 1
-                      ? { border: "5px solid blue" }
+                      ? { boxShadow: "inset -1px 0px 10px 2px blue" }
                       : ohje.sivu === 3 && laake.valmiste === "Natriumkloridi"
-                      ? { border: "5px solid blue" }
+                      ? { boxShadow: "inset -1px 0px 10px 2px blue" }
                       : {}
                   }
                 >
                   <b>
                     {laake.valmiste === "Natriumkloridi" ? (
                       <TextField
-                        sx={{ backgroundColor: "orange", width: "150%" }}
+                        sx={{ backgroundColor: "orange", width: "70%" }}
                         defaultValue={laake.mgVrk}
                         onChange={(e) => {
                           laakeTaulukko[idx].mgVrk = e.target.value;
                           setLaakeTaulukko([...laakeTaulukko]);
                         }}
                       />
-                    ) : mlVrk === 0 ? (
-                      <></>
-                    ) : (
-                      (Math.round(mlVrk * 100) / 100).toFixed(2)
+                    ) : mlVrk === 0 ? null : (
+                      String((Math.round(mlVrk * 100) / 100).toFixed(2)).replace(".", ",")
                     )}
                   </b>
                 </TableCell>
                 <TableCell align="center">
-                  {mgH === 0 ? <></> : (Math.round(mgH * 100) / 100).toFixed(2)}
+                  {mgH === 0
+                    ? null
+                    : String((Math.round(mgH * 100) / 100).toFixed(2)).replace(".", ",")}
                 </TableCell>
                 <TableCell align="center">
-                  {pitMgMl === 0 ? <></> : (Math.round(pitMgMl * 100) / 100).toFixed(2)}
+                  {pitMgMl === 0
+                    ? null
+                    : String((Math.round(pitMgMl * 100) / 100).toFixed(2)).replace(".", ",")}
                 </TableCell>
                 <TableCell align="center">
-                  {laake.valmiste === "Natriumkloridi" && nacl50 ? (
-                    nacl50.toFixed(1)
-                  ) : kasetti50 === 0 ? (
-                    <></>
-                  ) : (
-                    kasetti50.toFixed(1)
-                  )}
+                  {laake.valmiste === "Natriumkloridi" && nacl50
+                    ? String(nacl50.toFixed(1)).replace(".", ",")
+                    : kasetti50 === 0
+                    ? null
+                    : String(kasetti50.toFixed(1)).replace(".", ",")}
                 </TableCell>
                 <TableCell align="center">
-                  {laake.valmiste === "Natriumkloridi" && nacl100 ? (
-                    nacl100.toFixed(1)
-                  ) : kasetti100 === 0 ? (
-                    <></>
-                  ) : (
-                    kasetti100.toFixed(1)
-                  )}
+                  {laake.valmiste === "Natriumkloridi" && nacl100
+                    ? String(nacl100.toFixed(1)).replace(".", ",")
+                    : kasetti100 === 0
+                    ? null
+                    : String(kasetti100.toFixed(1)).replace(".", ",")}
                 </TableCell>
               </TableRow>
             </>
@@ -217,7 +216,7 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
               <TableCell>
                 <TextField
                   type={"number"}
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     setMuokkaustila({
                       ...muokkausTila,
                       tiedot: { ...muokkausTila.tiedot, mgVrk: Number(e.target.value) }
@@ -228,7 +227,7 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
               </TableCell>
             </>
           ) : (
-            <TableCell sx={{ width: "90%" }}>
+            <TableCell sx={{ width: "70%" }}>
               <Valinta />
             </TableCell>
           )}
@@ -237,32 +236,30 @@ const TaulukkoNakyma = (props: Props): React.ReactElement => {
           <TableCell padding="none" />
           <TableCell padding="none" />
           <TableCell padding="none">
-            <Typography fontSize={"12px"} sx={{ paddingLeft: "2" }}>
-              Infuusionopeus
-            </Typography>
+            <Typography fontSize={"14px"}>Infuusionopeus</Typography>
           </TableCell>
           <TableCell
             sx={
               ohje.sivu === 2
-                ? { border: "5px solid blue", backgroundColor: "yellow" }
-                : { backgroundColor: "yellow" }
+                ? { boxShadow: "inset -1px 0px 10px 2px blue", backgroundColor: "yellow" }
+                : { backgroundColor: "yellow", border: "1px solid orange" }
             }
             align="center"
           >
-            {mlVrkSumma.toFixed(2)} ml/vrk
+            {String(mlVrkSumma.toFixed(2)).replace(".", ",")} ml/vrk
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell padding="none" />
           <TableCell padding="none" />
           <TableCell padding="none">
-            <Typography fontSize={"12px"}>Infuusionopeus</Typography>
+            <Typography fontSize={"14px"}>Infuusionopeus</Typography>
           </TableCell>
           <TableCell
             sx={
               ohje.sivu === 2
-                ? { border: "5px solid blue", backgroundColor: "yellow" }
-                : { backgroundColor: "yellow" }
+                ? { boxShadow: "inset -1px 0px 10px 2px blue", backgroundColor: "yellow" }
+                : { backgroundColor: "yellow", border: "1px solid orange" }
             }
             align="center"
           >

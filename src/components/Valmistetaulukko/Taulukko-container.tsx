@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context, Laakeannos } from "../../context/context";
 import TaulukkoNakyma from "./Taulukko-nakyma";
 
-const TaulukkoContainer = () => {
+const TaulukkoBox = () => {
   const {
     laakeTaulukko,
     setLaakeTaulukko,
@@ -67,4 +67,4 @@ const TaulukkoContainer = () => {
   );
 };
 
-export default TaulukkoContainer;
+export default TaulukkoBox;
