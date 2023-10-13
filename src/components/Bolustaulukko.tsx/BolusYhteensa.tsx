@@ -1,4 +1,4 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Table, TableHead, TableRow, TableCell, TableBody, Grid } from "@mui/material";
 import React, { useContext } from "react";
 import { Context, Laakeannos } from "../../context/context";
 
@@ -9,10 +9,10 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
   }, 0);
 
   return (
-    <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%" }}>
-      <Table sx={{ backgroundColor: "#cfffdd" }}>
+    <Grid item xs={12} md={2}>
+      <Table sx={{ backgroundColor: "#cfffdd", boxShadow: 3 }}>
         <TableHead>
-          <TableRow sx={{ backgroundColor: "lightgreen" }}>
+          <TableRow sx={{ backgroundColor: "#abffc1" }}>
             <TableCell>Max bol lkm/h huomioiden oletettu käyttöaika</TableCell>
             <TableCell align="center">riittävyys (50ml)</TableCell>
             <TableCell align="center">riittävyys (100ml)</TableCell>
@@ -107,6 +107,6 @@ export const BolusYhteensa: React.FC = (): React.ReactElement => {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </Grid>
   );
 };

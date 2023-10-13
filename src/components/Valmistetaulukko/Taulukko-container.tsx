@@ -1,17 +1,11 @@
-import { TableContainer } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { Context, Laakeannos } from "../../context/context";
 import TaulukkoNakyma from "./Taulukko-nakyma";
+import laakeaineet from "../../laakeaineet.json";
 
-const TaulukkoBox = () => {
-  const {
-    laakeTaulukko,
-    setLaakeTaulukko,
-    muokkausTila,
-    setMuokkaustila,
-    setVaihtoehdot,
-    vaihtoehdot
-  } = useContext(Context);
+const TaulukkoContainer = () => {
+  const { laakeTaulukko, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot } =
+    useContext(Context);
 
   const [vahvuusMuok, setVahvuusMuok] = useState<any>({
     paalla: false,
@@ -21,27 +15,8 @@ const TaulukkoBox = () => {
     muutos: 0
   });
 
-  const poisto = (indeksi: number) => {
-    setLaakeTaulukko(
-      laakeTaulukko.filter((elementti: any) => {
-        return elementti !== laakeTaulukko[indeksi];
-      })
-    );
-    if (
-      laakeTaulukko[indeksi].valmiste === "Morfiini" ||
-      laakeTaulukko[indeksi].valmiste === "Oksikodoni" ||
-      laakeTaulukko[indeksi].valmiste === "Hydromorfiini" ||
-      laakeTaulukko[indeksi].valmiste === "Haloperidoli" ||
-      laakeTaulukko[indeksi].valmiste === "Midatsolaami" ||
-      laakeTaulukko[indeksi].valmiste === "Glykopyrroni" ||
-      laakeTaulukko[indeksi].valmiste === "Natriumkloridi"
-    )
-      setVaihtoehdot(
-        [...vaihtoehdot, laakeTaulukko[indeksi]].sort((a: Laakeannos, b: Laakeannos) => {
-          if (a.valmiste > b.valmiste) return 1;
-          else return -1;
-        })
-      );
+  const poisto = (laake: Laakeannos) => {
+    setLaakeTaulukko(laakeTaulukko.filter((item: any) => item !== laake));
   };
 
   useEffect(() => {
@@ -61,10 +36,8 @@ const TaulukkoBox = () => {
   }, [muokkausTila]);
 
   return (
-    <TableContainer sx={{ width: "70%", border: "3px solid #259443", boxShadow: 3 }}>
-      <TaulukkoNakyma vahvuusMuok={vahvuusMuok} setVahvuusMuok={setVahvuusMuok} poisto={poisto} />
-    </TableContainer>
+    <TaulukkoNakyma vahvuusMuok={vahvuusMuok} setVahvuusMuok={setVahvuusMuok} poisto={poisto} />
   );
 };
 
-export default TaulukkoBox;
+export default TaulukkoContainer;

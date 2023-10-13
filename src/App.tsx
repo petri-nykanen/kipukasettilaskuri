@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Grid, Button, Typography, Card, Box } from "@mui/material";
 import React, { useContext } from "react";
 import { Bolus } from "./components/Bolustaulukko.tsx/Bolus";
 import { BolusYhteensa } from "./components/Bolustaulukko.tsx/BolusYhteensa";
@@ -6,8 +6,9 @@ import { Footer } from "./components/Footer";
 import { Valinta } from "./components/Valinta";
 import { Yhteensa } from "./components/Valmistetaulukko/Yhteensa";
 import { Context } from "./context/context";
-import TaulukkoBox from "./components/Valmistetaulukko/Taulukko-container";
 import Header from "./components/Header";
+import TaulukkoContainer from "./components/Valmistetaulukko/Taulukko-container";
+import TemplateSelect from "./components/Kasettipohja/Valitse-pohja";
 
 function App() {
   const { ohje, setOhje, laakeTaulukko } = useContext(Context);
@@ -104,18 +105,22 @@ function App() {
   };
 
   return (
-    <Box
+    <Grid
+      spacing={4}
       sx={{
-        maxWidth: "1200px",
+        maxWidth: "1300px",
         margin: "auto",
-        justifyContent: "center",
-        display: "flex",
-        flexWrap: "wrap"
+        direction: "column"
       }}
     >
       <Header />
       <br />
-      {renderInstructions()}
+      {laakeTaulukko.length ? <TemplateSelect /> : null}
+
+      <Grid container direction={"row"}>
+        {renderInstructions()}
+      </Grid>
+
       <br />
       {ohje.auki === false && laakeTaulukko.length > 0 ? (
         <Button
@@ -128,25 +133,30 @@ function App() {
       ) : null}
 
       {laakeTaulukko.length > 0 ? (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <TaulukkoBox />
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Grid container spacing={2} columns={{ sm: 6, lg: 12 }}>
+            <TaulukkoContainer />
             <Yhteensa />
-          </Box>
+          </Grid>
 
-          <Box sx={{ display: "flex", flexDirection: "row", mt: "1%" }}>
+          <Grid container spacing={2} columns={{ sm: 6, lg: 12 }} sx={{ mt: "1%" }}>
             <Bolus />
             <BolusYhteensa />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       ) : (
-        <>
-          <Typography sx={{ padding: "20px" }}>Aloita lisäämällä taulukkoon lääkeaine</Typography>
-          <Valinta />
-        </>
+        <Card sx={{ width: "50%", borderRadius: "20px", border: "5px solid #3dd966", m: "auto" }}>
+          <Typography align="center" sx={{ padding: "20px", backgroundColor: "#3dd966" }}>
+            Aloita lisäämällä taulukkoon lääkeaine tai valitsemalla tallennettu kipukasettipohja
+          </Typography>
+          <Box sx={{ p: 3, backgroundColor: "#cfffdd", display: "flex", flexDirection: "column" }}>
+            <Valinta />
+            <TemplateSelect />
+          </Box>
+        </Card>
       )}
       <Footer />
-    </Box>
+    </Grid>
   );
 }
 

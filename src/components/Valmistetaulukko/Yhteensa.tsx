@@ -1,4 +1,4 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Table, TableHead, TableRow, TableCell, TableBody, Grid } from "@mui/material";
 import React, { useContext } from "react";
 import { Context, Laakeannos } from "../../context/context";
 
@@ -7,13 +7,10 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
     useContext(Context);
 
   return (
-    <TableContainer sx={{ width: "29.5%", marginLeft: "0.5%" }}>
-      <Table
-        sx={{ backgroundColor: "#cfffdd", border: "5px solid lightgreen" }}
-        aria-label="simple table"
-      >
+    <Grid item xs={12} md={2}>
+      <Table sx={{ backgroundColor: "#cfffdd", border: "5px solid #abffc1", boxShadow: 3 }}>
         <TableHead>
-          <TableRow sx={{ backgroundColor: "lightgreen" }}>
+          <TableRow sx={{ backgroundColor: "#abffc1" }}>
             <TableCell>Yhteensä</TableCell>
             <TableCell align="center">
               {Number(
@@ -182,6 +179,6 @@ export const Yhteensa: React.FC = (): React.ReactElement => {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </Grid>
   );
 };

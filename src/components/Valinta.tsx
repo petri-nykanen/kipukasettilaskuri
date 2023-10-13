@@ -22,7 +22,7 @@ export const Valinta: React.FC = (): React.ReactElement => {
   };
 
   return (
-    <FormControl sx={{ width: "100%", margin: "10px" }}>
+    <FormControl sx={{ width: "150%", margin: "auto" }}>
       <InputLabel shrink={false} id="demo-simple-select-label">
         Lisää lääkeaine
       </InputLabel>

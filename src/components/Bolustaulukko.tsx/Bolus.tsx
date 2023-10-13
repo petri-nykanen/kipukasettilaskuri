@@ -1,12 +1,12 @@
 import {
-  TableContainer,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
   TextField,
-  Typography
+  Typography,
+  Grid
 } from "@mui/material";
 import React, { useContext } from "react";
 import { Context, Laakeannos } from "../../context/context";
@@ -15,20 +15,20 @@ export const Bolus: React.FC = (): React.ReactElement => {
   const { ohje, laakeTaulukko, mlVrkSumma, bolus, setBolus } = useContext(Context);
 
   return (
-    <TableContainer sx={{ width: "70%", border: "3px solid #259443", boxShadow: 3 }}>
-      <Table sx={{ backgroundColor: "#cfffdd" }} aria-label="simple table">
+    <Grid item xs={12} md={10}>
+      <Table sx={{ backgroundColor: "#cfffdd", border: "3px solid #3dd966", boxShadow: 3 }}>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ backgroundColor: "#259443" }}>Boluksien määritys</TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }} />
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+            <TableCell sx={{ backgroundColor: "#3dd966" }}>Boluksien määritys</TableCell>
+            <TableCell align="center" sx={{ backgroundColor: "#3dd966" }} />
+            <TableCell align="center" sx={{ backgroundColor: "#3dd966" }} />
+            <TableCell align="center" sx={{ backgroundColor: "#3dd966" }}>
               bolus ml
             </TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+            <TableCell align="center" sx={{ backgroundColor: "#3dd966" }}>
               max bol lkm/h
             </TableCell>
-            <TableCell align="center" sx={{ backgroundColor: "#259443" }}>
+            <TableCell align="center" sx={{ backgroundColor: "#3dd966" }}>
               lukko (min)
             </TableCell>
           </TableRow>
@@ -112,6 +112,6 @@ export const Bolus: React.FC = (): React.ReactElement => {
             })}
         </TableBody>
       </Table>
-    </TableContainer>
+    </Grid>
   );
 };

@@ -45,41 +45,6 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
       : JSON.parse(String(localStorage.getItem("laakeaineet")))
   );
 
-  const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>(
-    !localStorage.getItem("valinta")
-      ? laakeaineet.sort((a: Laakeannos, b: Laakeannos) => {
-          if (a.valmiste > b.valmiste) return 1;
-          else return -1;
-        })
-      : JSON.parse(String(localStorage.getItem("valinta"))).sort((a: Laakeannos, b: Laakeannos) => {
-          if (a.valmiste > b.valmiste) return 1;
-          else return -1;
-        })
-  );
-
-  const paivitaTaulukko = () => {
-    if (laakeTaulukko.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0) {
-      setMlVrkSumma(
-        laakeTaulukko
-          ?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi")
-          .reduce((edellinen: number, seuraava: Laakeannos) => {
-            return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus);
-          }, 0) +
-          Number(
-            laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk
-          )
-      );
-    } else {
-      setMlVrkSumma(
-        laakeTaulukko
-          ?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi")
-          .reduce((edellinen: number, seuraava: Laakeannos) => {
-            return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus);
-          }, 0)
-      );
-    }
-  };
-
   const [mlVrkSumma, setMlVrkSumma] = useState<number>(
     laakeTaulukko
       ?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi")
@@ -106,11 +71,7 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
     laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi"),
     (laake: Laakeannos) => {
       const mlVrk = laake.mgVrk / laake.laVahvuus;
-      // let mgH = mlVrk / 24 * laake.laVahvuus;
-      // let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
       const kasetti50 = (mlVrk / mlVrkSumma) * 50;
-      // let kasetti100 = mlVrk / mlVrkSumma * 100;
-      // let riittavyys50kaVrk = kasetti50 / mlVrk;
 
       if (isNaN(kasetti50 / mlVrk)) return 0;
       else return kasetti50 / mlVrk;
@@ -128,6 +89,32 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
     }
   );
 
+  const [vaihtoehdot, setVaihtoehdot] = useState<Laakeannos[]>(laakeaineet);
+
+  const paivitaTaulukko = () => {
+    if (laakeTaulukko.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi").length > 0) {
+      setMlVrkSumma(
+        laakeTaulukko
+          ?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi")
+          .reduce((edellinen: number, seuraava: Laakeannos) => {
+            return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus);
+          }, 0) +
+          Number(
+            laakeTaulukko?.filter((elem: Laakeannos) => elem.valmiste === "Natriumkloridi")[0].mgVrk
+          )
+      );
+    } else {
+      setMlVrkSumma(
+        laakeTaulukko
+          ?.filter((elem: Laakeannos) => elem.valmiste !== "Natriumkloridi")
+          .reduce((edellinen: number, seuraava: Laakeannos) => {
+            return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus);
+          }, 0)
+      );
+    }
+    setVaihtoehdot(laakeaineet.filter((item: Laakeannos) => !laakeTaulukko.includes(item)));
+  };
+
   const getIndex = (): number => {
     let idx = 0;
 
@@ -140,10 +127,6 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
   useEffect(() => {
     paivitaTaulukko();
     localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko));
-    localStorage.setItem(
-      "valinta",
-      JSON.stringify(vaihtoehdot.filter((el: any) => !laakeTaulukko?.includes(el)))
-    );
   }, [laakeTaulukko]);
 
   return (
@@ -165,7 +148,8 @@ export const ContextProvider: React.FC<Props> = (props: Props): React.ReactEleme
         vaihtoehdot,
         setVaihtoehdot,
         muokkausTila,
-        setMuokkaustila
+        setMuokkaustila,
+        paivitaTaulukko
       }}
     >
       {props.children}
