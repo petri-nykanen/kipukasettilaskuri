@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitThis": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve"
   },
   "include": [
     "src"

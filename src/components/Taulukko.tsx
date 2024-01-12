@@ -15,8 +15,19 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       arvo : 0,
       dialog : false,
       nimi : "",
-      muutos : 0
+      muutos : 0,
+      omaMlh : false 
     }) 
+
+    const omaMlhContent = () => {
+      if (vahvuusMuok.omaMlh) return (
+        <>
+        <TextField sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        <Button variant={'outlined'}>Ok</Button>
+        </>
+      )
+      else return <Button variant={'contained'} sx={{backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>Oma</Button>
+    }
 
     const poisto = (indeksi : number) => {
       setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))
@@ -216,7 +227,8 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{mlVrkSumma.toFixed(2)} ml/vrk</TableCell>
+                  } align="center">{mlVrkSumma.toFixed(2)}</TableCell>
+                        <TableCell>ml/vrk</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell padding="none" ></TableCell>
@@ -226,7 +238,21 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{(mlVrkSumma / 24).toFixed(2)} ml/h</TableCell>
+                  } align="center">{(mlVrkSumma / 24).toFixed(2)}</TableCell>
+                  <TableCell>ml/h</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ><Typography fontSize={"12px"}>Infuusionopeus</Typography></TableCell>
+                        <TableCell 
+                        onDoubleClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
+                        sx={
+                  (ohje.sivu === 2)
+                  ?{border:"5px solid blue", backgroundColor:"yellow"}
+                  :{backgroundColor:"yellow"}
+                  } align="center">{omaMlhContent()}</TableCell>
+                    <TableCell>ml/h</TableCell>
                     </TableRow>
       </TableBody>
     </Table>
