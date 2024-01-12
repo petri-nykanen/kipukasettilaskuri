@@ -12,6 +12,11 @@ export const Footer : React.FC = () : React.ReactElement => {
     setDialogProps({...dialogProps, open : true})
   }
 
+  const resetoi = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
+
   return (
     <div style={{display:"flex-col", margin:"auto"}}>
       <Button onClick={() => reset()}>RESETOI SOVELLUS</Button>
@@ -23,8 +28,12 @@ export const Footer : React.FC = () : React.ReactElement => {
         >Petri Nykänen {new Date().getFullYear()}{<br></br>}
         petri.nykaenen@gmail.com
       </Typography>
-      <GenericDialog dialogOpen={dialogProps.open} dialogTitle={"Testi"} dialogOptions={setDialogProps}>
-         <Typography></Typography>
+      <GenericDialog dialogOpen={dialogProps.open} dialogTitle={"Resetoi sovellus"} dialogOptions={setDialogProps}>
+         <Typography textAlign={"center"}>
+          Tämä toiminto suorittaa laskurin nollauksen tyhjentämällä selaimen paikallismuistin. Käytetään ongelmatilanteissa.
+          <br/>
+          <Button onClick={() => resetoi()}>Ok</Button>
+         </Typography>
       </GenericDialog>
     </div>
   )
