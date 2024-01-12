@@ -1,6 +1,6 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton, DialogContentText, DialogActions, Dialog, DialogContent, Button } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
 import { Valinta } from './Valinta';
 
@@ -8,7 +8,7 @@ import { Valinta } from './Valinta';
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot, omaMlh, setOmaMlh } = useContext(Context)
 
     const [vahvuusMuok, setVahvuusMuok] = useState<any>({
       paalla : false,
@@ -16,17 +16,28 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       dialog : false,
       nimi : "",
       muutos : 0,
-      omaMlh : false 
+      omaMlh : false,
+      omaMlhValue : 0
     }) 
 
     const omaMlhContent = () => {
       if (vahvuusMuok.omaMlh) return (
         <>
-        <TextField sx={{backgroundColor:"white", mb:"5%"}}></TextField>
-        <Button variant={'outlined'}>Ok</Button>
+        <TextField
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValue : e.target.value})} 
+        type='number' 
+        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        <Button 
+        onClick={() => setOmaMlh(vahvuusMuok.omaMlhValue)}
+        variant={'outlined'}>Ok</Button>
         </>
       )
-      else return <Button variant={'contained'} sx={{backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>Oma</Button>
+      else return (
+      <Button 
+      variant={'contained'} 
+      onClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
+      sx={{backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>
+      Oma</Button>)
     }
 
     const poisto = (indeksi : number) => {
@@ -52,6 +63,16 @@ export const Taulukko : React.FC = () : React.ReactElement => {
         else
           return -1
       }))
+    }
+
+    const renderOmaMlhVaroitus = () => {
+      if (omaMlh) return (
+      <>
+      <TableCell sx={{color:"red", fontWeight:"bold"}}>
+      Sinulla on käytössä asetettu annostelunopeus!
+      <Button onClick={() => {setOmaMlh(0); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValue : 0})}}>Poista</Button>
+      </TableCell>
+      </>)
     }
 
     useEffect(() => {
@@ -253,6 +274,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   :{backgroundColor:"yellow"}
                   } align="center">{omaMlhContent()}</TableCell>
                     <TableCell>ml/h</TableCell>
+                    {renderOmaMlhVaroitus()}
                     </TableRow>
       </TableBody>
     </Table>
