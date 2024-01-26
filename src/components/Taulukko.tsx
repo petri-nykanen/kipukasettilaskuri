@@ -17,27 +17,48 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       nimi : "",
       muutos : 0,
       omaMlh : false,
-      omaMlhValue : 0
+      omaMlhValueVrk : 0,
+      omaMlhValueH : 0
     }) 
 
     const omaMlhContent = () => {
       if (vahvuusMuok.omaMlh) return (
-        <>
-        <TextField
-        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValue : e.target.value})} 
-        type='number' 
-        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
         <Button 
         onClick={() => setOmaMlh(vahvuusMuok.omaMlhValue)}
         variant={'outlined'}>Ok</Button>
-        </>
       )
       else return (
       <Button 
       variant={'contained'} 
       onClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
-      sx={{backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>
-      Oma</Button>)
+      sx={{fontSize:"10px",backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>
+      Aseta oma</Button>)
+    }
+
+    const omaMlhTaiFixedMlh = (aikavali : string) => {
+
+      if (vahvuusMuok.omaMlh && aikavali === "vrk") return (
+        <>
+        <TextField
+        value={vahvuusMuok.omaMlhValueVrk}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueVrk : e.target.value, omaMlhValueH : Number(e.target.value) / 24})} 
+        type='number' 
+        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        </>
+      )
+      if (vahvuusMuok.omaMlh && aikavali !== "vrk") return (
+        <>
+        <TextField
+        value={vahvuusMuok.omaMlhValueH}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueH : e.target.value, omaMlhValueVrk : Number(e.target.value) * 24})} 
+        type='number' 
+        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        </>
+      )
+      if (!vahvuusMuok.omaMlh && aikavali === "vrk"){
+        return ((mlVrkSumma).toFixed(2))
+      }
+      else return ((mlVrkSumma / 24).toFixed(2))
     }
 
     const poisto = (indeksi : number) => {
@@ -70,7 +91,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       <>
       <TableCell sx={{color:"red", fontWeight:"bold"}}>
       Sinulla on käytössä asetettu annostelunopeus!
-      <Button onClick={() => {setOmaMlh(0); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValue : 0})}}>Poista</Button>
+      <Button onClick={() => {setOmaMlh(0); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValueH : 0, omaMlhValueVrk: 0})}}>Poista</Button>
       </TableCell>
       </>)
     }
@@ -248,7 +269,8 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{mlVrkSumma.toFixed(2)}</TableCell>
+                  } align="center">{omaMlhTaiFixedMlh("vrk")}</TableCell>
+                  {/* {mlVrkSumma.toFixed(2)} */}
                         <TableCell>ml/vrk</TableCell>
                     </TableRow>
                     <TableRow>
@@ -259,13 +281,14 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{(mlVrkSumma / 24).toFixed(2)}</TableCell>
+                  } align="center">{omaMlhTaiFixedMlh("h")}</TableCell>
+                  {/* {(mlVrkSumma / 24).toFixed(2)} */}
                   <TableCell>ml/h</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell padding="none" ></TableCell>
                         <TableCell padding="none" ></TableCell>
-                        <TableCell padding="none" ><Typography fontSize={"12px"}>Infuusionopeus</Typography></TableCell>
+                        <TableCell padding="none" ><Typography></Typography></TableCell>
                         <TableCell 
                         onDoubleClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
                         sx={
@@ -273,7 +296,6 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
                   } align="center">{omaMlhContent()}</TableCell>
-                    <TableCell>ml/h</TableCell>
                     {renderOmaMlhVaroitus()}
                     </TableRow>
       </TableBody>

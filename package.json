@@ -2,7 +2,7 @@
   "name": "kipukasettilaskuri",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cpeny003-xamk.github.io/kipukasettilaskuri",
+  "homepage": "https://www.kipukasettilaskuri.fi/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
