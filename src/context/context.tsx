@@ -110,10 +110,7 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       }
     }
 
-    const [omaMlh, setOmaMlh] = useState({
-      vrk : 0,
-      h : 0
-    });
+    const [omaMlh, setOmaMlh] = useState(false);
 
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(
        laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
@@ -169,9 +166,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
 
   useEffect(() => {
     if (laakeTaulukko.length) {
-      if (omaMlh && (omaMlh.h > 0 || omaMlh.vrk > 0)) setMlVrkSumma(omaMlh.vrk * 24);
-      else paivitaTaulukko();
+      if (!omaMlh) paivitaTaulukko();
     }
+    console.log(typeof(mlVrkSumma))
   }, [omaMlh])
 
     useEffect(() => {

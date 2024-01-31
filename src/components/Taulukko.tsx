@@ -3,12 +3,13 @@ import ClearIcon from '@mui/icons-material/Clear';
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
 import { Valinta } from './Valinta';
+import GenericDialog from './GenericDialog';
 
 
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot, omaMlh, setOmaMlh } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot, omaMlh, setOmaMlh, setMlVrkSumma } = useContext(Context)
 
     const [vahvuusMuok, setVahvuusMuok] = useState<any>({
       paalla : false,
@@ -18,31 +19,52 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       muutos : 0,
       omaMlh : false,
       omaMlhValueVrk : 0,
-      omaMlhValueH : 0
+      omaMlhValueH : 0,
+      omaDialog : false
     }) 
+
+    const vrkRef : React.MutableRefObject<string | undefined> = useRef();
+    const hRef : React.MutableRefObject<string | undefined> = useRef();
 
     const omaMlhContent = () => {
       if (vahvuusMuok.omaMlh) return (
+        <>
         <Button 
-        onClick={() => setOmaMlh(vahvuusMuok.omaMlhValue)}
+        onClick={() => setVahvuusMuok({...vahvuusMuok, omaDialog : true})}
         variant={'outlined'}>Ok</Button>
+
+        <Button 
+        onClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : false})}
+        variant={'outlined'}>Peruuta</Button>
+        </>
       )
-      else return (
+      return (
       <Button 
       variant={'contained'} 
-      onClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
+      onClick={() => {setVahvuusMuok({...vahvuusMuok, omaMlh : true});}}
       sx={{fontSize:"10px",backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>
       Aseta oma</Button>)
     }
 
-    const omaMlhTaiFixedMlh = (aikavali : string) => {
+    const mlhSet = () => {
+        if (vrkRef.current) {
+           setMlVrkSumma(Number(vahvuusMuok.omaMlhValueVrk)); setVahvuusMuok({...vahvuusMuok, omaMlh : false}); setOmaMlh(true)
+        }
+        else {
+          setMlVrkSumma(Number(vahvuusMuok.omaMlhValueH)); setVahvuusMuok({...vahvuusMuok, omaMlh : false}); setOmaMlh(true)
+        }
+        setVahvuusMuok({...vahvuusMuok, omaDialog : false, omaMlh : false})
+    }
 
+ 
+    const omaMlhTaiFixedMlh = (aikavali : string) => {
       if (vahvuusMuok.omaMlh && aikavali === "vrk") return (
         <>
         <TextField
         value={vahvuusMuok.omaMlhValueVrk}
-        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueVrk : e.target.value, omaMlhValueH : Number(e.target.value) / 24})} 
-        type='number' 
+        inputRef={vrkRef}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueVrk : e.target.value, omaMlhValueH : (Number(e.target.value) / 24).toFixed(2)})} 
+        type='tel' 
         sx={{backgroundColor:"white", mb:"5%"}}></TextField>
         </>
       )
@@ -50,15 +72,17 @@ export const Taulukko : React.FC = () : React.ReactElement => {
         <>
         <TextField
         value={vahvuusMuok.omaMlhValueH}
-        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueH : e.target.value, omaMlhValueVrk : Number(e.target.value) * 24})} 
-        type='number' 
+        inputRef={hRef}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueH : e.target.value, omaMlhValueVrk : (Number(e.target.value) * 24).toFixed(2)})} 
+        type='tel' 
         sx={{backgroundColor:"white", mb:"5%"}}></TextField>
         </>
       )
+
       if (!vahvuusMuok.omaMlh && aikavali === "vrk"){
-        return ((mlVrkSumma).toFixed(2))
+        return (mlVrkSumma).toFixed(2)
       }
-      else return ((mlVrkSumma / 24).toFixed(2))
+      else return (mlVrkSumma / 24).toFixed(2)
     }
 
     const poisto = (indeksi : number) => {
@@ -91,7 +115,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
       <>
       <TableCell sx={{color:"red", fontWeight:"bold"}}>
       Sinulla on käytössä asetettu annostelunopeus!
-      <Button onClick={() => {setOmaMlh(0); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValueH : 0, omaMlhValueVrk: 0})}}>Poista</Button>
+      <Button onClick={() => {setOmaMlh(false); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValueH : 0, omaMlhValueVrk: 0})}}>Poista</Button>
       </TableCell>
       </>)
     }
@@ -131,7 +155,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
           let kasetti50 = mlVrk / mlVrkSumma * 50;
           let kasetti100 = mlVrk / mlVrkSumma * 100;
-          // let riittavyys50kaVrk = kasetti50 / mlVrk;
+
           let nacl50 = 0
           let nacl100 = 0;
 
@@ -300,6 +324,16 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                     </TableRow>
       </TableBody>
     </Table>
+
+    <GenericDialog dialogOpen={vahvuusMuok.omaDialog} dialogTitle={"Oma vahvuusnopeus"} dialogOptions={setVahvuusMuok}>
+      <Typography textAlign={"center"}>
+      Olet asettamassa annostelunopeuden manuaalisesti. Varmistathan, että kaikki arvot ovat oikein!
+      <br/>
+      <Button onClick={mlhSet}>Ok</Button>
+      <Button onClick={() => setVahvuusMuok({...vahvuusMuok, omaDialog : false})}>Peruuta</Button>
+      </Typography>
+    </GenericDialog>
+
   </TableContainer>
   )
 }

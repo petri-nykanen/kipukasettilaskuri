@@ -9,7 +9,7 @@ dialogOptions: Dispatch<SetStateAction<{ open: boolean; }>>
 }
 
 const GenericDialog = (props : Props) => {
-    const {dialogOpen, dialogTitle, children} = props;
+    const {dialogOpen, dialogTitle, dialogOptions, children} = props;
   return (
     <Dialog
     open={dialogOpen}
