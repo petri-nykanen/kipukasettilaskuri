@@ -1,22 +1,89 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TextField, Typography, IconButton, DialogContentText, DialogActions, Dialog, DialogContent, Button } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Context, Laakeannos } from '../context/context'
 import { Valinta } from './Valinta';
+import GenericDialog from './GenericDialog';
 
 
 
 export const Taulukko : React.FC = () : React.ReactElement => {
 
-    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot } = useContext(Context)
+    const { laakeTaulukko, mlVrkSumma, ohje, setLaakeTaulukko, muokkausTila, setMuokkaustila, setVaihtoehdot, vaihtoehdot, omaMlh, setOmaMlh, setMlVrkSumma } = useContext(Context)
 
     const [vahvuusMuok, setVahvuusMuok] = useState<any>({
       paalla : false,
       arvo : 0,
       dialog : false,
       nimi : "",
-      muutos : 0
+      muutos : 0,
+      omaMlh : false,
+      omaMlhValueVrk : 0,
+      omaMlhValueH : 0,
+      omaDialog : false
     }) 
+
+    const vrkRef : React.MutableRefObject<string | undefined> = useRef();
+    const hRef : React.MutableRefObject<string | undefined> = useRef();
+
+    const omaMlhContent = () => {
+      if (vahvuusMuok.omaMlh) return (
+        <>
+        <Button 
+        onClick={() => setVahvuusMuok({...vahvuusMuok, omaDialog : true})}
+        variant={'outlined'}>Ok</Button>
+
+        <Button 
+        onClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : false})}
+        variant={'outlined'}>Peruuta</Button>
+        </>
+      )
+      return (
+      <Button 
+      variant={'contained'} 
+      onClick={() => {setVahvuusMuok({...vahvuusMuok, omaMlh : true});}}
+      sx={{fontSize:"10px",backgroundColor:"orange", "&:hover":{backgroundColor:"darkorange"}}}>
+      Aseta oma</Button>)
+    }
+
+    const mlhSet = () => {
+        if (vrkRef.current) {
+           setMlVrkSumma(Number(vahvuusMuok.omaMlhValueVrk)); setVahvuusMuok({...vahvuusMuok, omaMlh : false}); setOmaMlh(true)
+        }
+        else {
+          setMlVrkSumma(Number(vahvuusMuok.omaMlhValueH)); setVahvuusMuok({...vahvuusMuok, omaMlh : false}); setOmaMlh(true)
+        }
+        setVahvuusMuok({...vahvuusMuok, omaDialog : false, omaMlh : false})
+    }
+
+ 
+    const omaMlhTaiFixedMlh = (aikavali : string) => {
+      if (vahvuusMuok.omaMlh && aikavali === "vrk") return (
+        <>
+        <TextField
+        value={vahvuusMuok.omaMlhValueVrk}
+        inputRef={vrkRef}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueVrk : e.target.value, omaMlhValueH : (Number(e.target.value) / 24).toFixed(2)})} 
+        type='tel' 
+        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        </>
+      )
+      if (vahvuusMuok.omaMlh && aikavali !== "vrk") return (
+        <>
+        <TextField
+        value={vahvuusMuok.omaMlhValueH}
+        inputRef={hRef}
+        onChange={(e) => setVahvuusMuok({...vahvuusMuok, omaMlhValueH : e.target.value, omaMlhValueVrk : (Number(e.target.value) * 24).toFixed(2)})} 
+        type='tel' 
+        sx={{backgroundColor:"white", mb:"5%"}}></TextField>
+        </>
+      )
+
+      if (!vahvuusMuok.omaMlh && aikavali === "vrk"){
+        return (mlVrkSumma).toFixed(2)
+      }
+      else return (mlVrkSumma / 24).toFixed(2)
+    }
 
     const poisto = (indeksi : number) => {
       setLaakeTaulukko(laakeTaulukko.filter((elementti : any) => {return elementti !== laakeTaulukko[indeksi]}))
@@ -41,6 +108,16 @@ export const Taulukko : React.FC = () : React.ReactElement => {
         else
           return -1
       }))
+    }
+
+    const renderOmaMlhVaroitus = () => {
+      if (omaMlh) return (
+      <>
+      <TableCell sx={{color:"red", fontWeight:"bold"}}>
+      Sinulla on käytössä asetettu annostelunopeus!
+      <Button onClick={() => {setOmaMlh(false); setVahvuusMuok({...vahvuusMuok, omaMlh : false, omaMlhValueH : 0, omaMlhValueVrk: 0})}}>Poista</Button>
+      </TableCell>
+      </>)
     }
 
     useEffect(() => {
@@ -78,7 +155,7 @@ export const Taulukko : React.FC = () : React.ReactElement => {
           let pitMgMl = mlVrk / mlVrkSumma * laake.laVahvuus
           let kasetti50 = mlVrk / mlVrkSumma * 50;
           let kasetti100 = mlVrk / mlVrkSumma * 100;
-          // let riittavyys50kaVrk = kasetti50 / mlVrk;
+
           let nacl50 = 0
           let nacl100 = 0;
 
@@ -216,7 +293,9 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{mlVrkSumma.toFixed(2)} ml/vrk</TableCell>
+                  } align="center">{omaMlhTaiFixedMlh("vrk")}</TableCell>
+                  {/* {mlVrkSumma.toFixed(2)} */}
+                        <TableCell>ml/vrk</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell padding="none" ></TableCell>
@@ -226,10 +305,35 @@ export const Taulukko : React.FC = () : React.ReactElement => {
                   (ohje.sivu === 2)
                   ?{border:"5px solid blue", backgroundColor:"yellow"}
                   :{backgroundColor:"yellow"}
-                  } align="center">{(mlVrkSumma / 24).toFixed(2)} ml/h</TableCell>
+                  } align="center">{omaMlhTaiFixedMlh("h")}</TableCell>
+                  {/* {(mlVrkSumma / 24).toFixed(2)} */}
+                  <TableCell>ml/h</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ></TableCell>
+                        <TableCell padding="none" ><Typography></Typography></TableCell>
+                        <TableCell 
+                        onDoubleClick={() => setVahvuusMuok({...vahvuusMuok, omaMlh : true})}
+                        sx={
+                  (ohje.sivu === 2)
+                  ?{border:"5px solid blue", backgroundColor:"yellow"}
+                  :{backgroundColor:"yellow"}
+                  } align="center">{omaMlhContent()}</TableCell>
+                    {renderOmaMlhVaroitus()}
                     </TableRow>
       </TableBody>
     </Table>
+
+    <GenericDialog dialogOpen={vahvuusMuok.omaDialog} dialogTitle={"Oma vahvuusnopeus"} dialogOptions={setVahvuusMuok}>
+      <Typography textAlign={"center"}>
+      Olet asettamassa annostelunopeuden manuaalisesti. Varmistathan, että kaikki arvot ovat oikein!
+      <br/>
+      <Button onClick={mlhSet}>Ok</Button>
+      <Button onClick={() => setVahvuusMuok({...vahvuusMuok, omaDialog : false})}>Peruuta</Button>
+      </Typography>
+    </GenericDialog>
+
   </TableContainer>
   )
 }

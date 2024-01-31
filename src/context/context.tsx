@@ -110,8 +110,10 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       }
     }
 
+    const [omaMlh, setOmaMlh] = useState(false);
+
     const [mlVrkSumma, setMlVrkSumma] = useState<number>(
-      laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
+       laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {return edellinen + Number(seuraava.mgVrk / seuraava.laVahvuus)}, 0)
       )
 
     const [riittavyys50ml, setRiittavyys50ml] = useState<number>(laakeTaulukko!.filter((elem : Laakeannos) => elem.valmiste !== "Natriumkloridi").reduce((edellinen : number, seuraava : Laakeannos) => {
@@ -162,6 +164,13 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
     return idx;
   }
 
+  useEffect(() => {
+    if (laakeTaulukko.length) {
+      if (!omaMlh) paivitaTaulukko();
+    }
+    console.log(typeof(mlVrkSumma))
+  }, [omaMlh])
+
     useEffect(() => {
         paivitaTaulukko()
         localStorage.setItem("laakeaineet", JSON.stringify(laakeTaulukko));
@@ -186,7 +195,9 @@ export const ContextProvider : React.FC<Props> = (props : Props) : React.ReactEl
       vaihtoehdot,
       setVaihtoehdot,
       muokkausTila,
-      setMuokkaustila
+      setMuokkaustila,
+      omaMlh,
+      setOmaMlh
     }}>
         {props.children}
     </Context.Provider>
