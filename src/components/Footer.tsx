@@ -28,11 +28,12 @@ export const Footer : React.FC = () : React.ReactElement => {
         >Petri Nykänen {new Date().getFullYear()}{<br></br>}
         petri.nykaenen@gmail.com
       </Typography>
-      <GenericDialog dialogOpen={dialogProps.open} dialogTitle={"Resetoi sovellus"} dialogOptions={setDialogProps}>
+      <GenericDialog dialogOpen={dialogProps.open} dialogTitle={"Nollaa taulukko"} dialogOptions={setDialogProps}>
          <Typography textAlign={"center"}>
           Tämä toiminto suorittaa laskurin nollauksen tyhjentämällä selaimen paikallismuistin. Käytetään ongelmatilanteissa.
           <br/>
           <Button onClick={() => resetoi()}>Ok</Button>
+          <Button onClick={() => setDialogProps({...dialogProps, open : false})}>Peruuta</Button>
          </Typography>
       </GenericDialog>
     </div>
