@@ -25,84 +25,84 @@ function App() {
 
   return (
     <>
-    <Container ref={headerRef} sx={{width:"1200px", display:"flex", flexWrap:"wrap"}}>
-    {
-      (ohje.auki)
-      ? <Container sx={{}}>
+      <Container ref={headerRef} sx={{ width: "1200px", display: "flex", flexWrap: "wrap" }}>
         {
-          (ohje.sivu === 1)
-          ? 
-          <>
-          <Typography sx={{padding:"20px"}}>
-          Määrää lääkkeen vrk-annos mg (oranssi kenttä), saat vastaavan määrä ml:ssa viereiseen sarakkeeseen
+          (ohje.auki)
+            ? <Container sx={{}}>
+              {
+                (ohje.sivu === 1)
+                  ?
+                  <>
+                    <Typography sx={{ padding: "20px" }}>
+                      Määrää lääkkeen vrk-annos mg (oranssi kenttä), saat vastaavan määrä ml:ssa viereiseen sarakkeeseen
 
-          </Typography>
-          <Button variant="outlined" onClick={() => {setOhje({...ohje, sivu : 2}); scroll()}}>Seuraava</Button>
-          </>
-          : (ohje.sivu === 3)
-          ? 
-          <>
-          <Typography sx={{padding:"20px"}}>
-          Määrää tarvittaessa NaCl tilavuus (oranssi kenttä) pyrkien pieneen infuusionopeuteen (0,1-2,0 ml/h), tarkista samalla lääkeannostelijan riittävyys vuorokausissa (vrk) ja tuntia (h)
+                    </Typography>
+                    <Button variant="outlined" onClick={() => { setOhje({ ...ohje, sivu: 2 }); scroll() }}>Seuraava</Button>
+                  </>
+                  : (ohje.sivu === 3)
+                    ?
+                    <>
+                      <Typography sx={{ padding: "20px" }}>
+                        Määrää tarvittaessa NaCl tilavuus (oranssi kenttä) pyrkien pieneen infuusionopeuteen (0,1-2,0 ml/h), tarkista samalla lääkeannostelijan riittävyys vuorokausissa (vrk) ja tuntia (h)
 
 
-          </Typography>
-          <Button sx={{display:"block"}} variant="outlined" onClick={() => {setOhje({...ohje, sivu : 4}); scroll()}}>Seuraava</Button>
-          </>
-          : (ohje.sivu === 5)
-          ?<><Typography sx={{padding:"20px"}}>
-          Voit muuttaa lääkeaineen vahvuutta tuplaklikkaamalla kenttää, jolloin avautuu tekstikenttä muokkaamista varten.
-          </Typography>
-          <Button sx={{display:"block"}} variant="outlined" onClick={() => {setOhje({...ohje, auki : false, sivu : 0}); scrollHead()}}>Seuraava</Button>
-          </>
-          :<></>
+                      </Typography>
+                      <Button sx={{ display: "block" }} variant="outlined" onClick={() => { setOhje({ ...ohje, sivu: 4 }); scroll() }}>Seuraava</Button>
+                    </>
+                    : (ohje.sivu === 5)
+                      ? <><Typography sx={{ padding: "20px" }}>
+                        Voit muuttaa lääkeaineen vahvuutta tuplaklikkaamalla kenttää, jolloin avautuu tekstikenttä muokkaamista varten.
+                      </Typography>
+                        <Button sx={{ display: "block" }} variant="outlined" onClick={() => { setOhje({ ...ohje, auki: false, sivu: 0 }); scrollHead() }}>Seuraava</Button>
+                      </>
+                      : <></>
+              }
+            </Container>
+            : <></>
         }
-      </Container>
-      : <></>
-    }
-    <br/>
-    { (ohje.auki === false && laakeTaulukko.length > 0)
-      ?<Button variant="outlined" sx={{margin:"10px", display:"block"}} onClick={() => setOhje({...ohje, auki : true, sivu : 1})}>OHJE</Button>
-      :<></>
-    }
+        <br />
+        {(ohje.auki === false && laakeTaulukko.length > 0)
+          ? <Button variant="outlined" sx={{ margin: "10px", display: "block" }} onClick={() => setOhje({ ...ohje, auki: true, sivu: 1 })}>OHJE</Button>
+          : <></>
+        }
 
-    { (laakeTaulukko.length > 0)
-      ?<Container sx={{display:"flex", flexWrap:"nowrap"}}>
-          <Taulukko/>
-          <Yhteensa/>
-      </Container>
-      :<><Typography sx={{padding:"20px"}}>Aloita lisäämällä taulukkoon lääkeaine</Typography><Valinta/></>
-    }
-      {
-        (ohje.sivu === 2)
-        ? 
-        <>
-        <Typography sx={{padding:"20px"}}>
-        Katso liuoksen minimimäärä vuorokaudessa ja tunnissa.
+        {(laakeTaulukko.length > 0)
+          ? <Container sx={{ display: "flex", flexWrap: "nowrap" }}>
+            <Taulukko />
+            <Yhteensa />
+          </Container>
+          : <><Typography sx={{ padding: "20px" }}>Aloita lisäämällä taulukkoon lääkeaine</Typography><Valinta /></>
+        }
+        {
+          (ohje.sivu === 2)
+            ?
+            <>
+              <Typography sx={{ padding: "20px" }}>
+                Katso liuoksen minimimäärä vuorokaudessa ja tunnissa.
 
-        </Typography>
-        <Button variant="outlined" onClick={() => {setOhje({...ohje, sivu : 3}); scrollHead()}}>Seuraava</Button>
-        </>
-        :(ohje.sivu === 4)
-        ?
-        <>
-        <Typography sx={{padding:"20px"}}>Tarvittaessa, määritä bolukset alas taulukkoon ml ja max bol/h</Typography>
-        <Button sx={{marginLeft:"10px"}} variant="outlined" onClick={() => {setOhje({...ohje, sivu : 5}); scrollHead()}}>Seuraava</Button>
-        </>
-        : <></>
-      }
-      {
-        (laakeTaulukko.length > 0)
-      ?<Container sx={{display:"flex", flexWrap:"nowrap", marginTop:"1%"}} ref={titleRef}>
-        <Bolus/>
-        <BolusYhteensa/>
+              </Typography>
+              <Button variant="outlined" onClick={() => { setOhje({ ...ohje, sivu: 3 }); scrollHead() }}>Seuraava</Button>
+            </>
+            : (ohje.sivu === 4)
+              ?
+              <>
+                <Typography sx={{ padding: "20px" }}>Tarvittaessa, määritä bolukset alas taulukkoon ml ja max bol/h</Typography>
+                <Button sx={{ marginLeft: "10px" }} variant="outlined" onClick={() => { setOhje({ ...ohje, sivu: 5 }); scrollHead() }}>Seuraava</Button>
+              </>
+              : <></>
+        }
+        {
+          (laakeTaulukko.length > 0)
+            ? <Container sx={{ display: "flex", flexWrap: "nowrap", marginTop: "1%" }} ref={titleRef}>
+              <Bolus />
+              <BolusYhteensa />
+            </Container>
+            : <></>
+        }
+        <Footer />
       </Container>
-      :<></>
-      }
-    <Footer/>
-    </Container>
-    
-  </>
+
+    </>
   );
 }
 
